@@ -17,7 +17,7 @@
 	"entrypoints": {
 		"main": [
 			{
-				"value": "dev.frozencloud.frozencloud.Frozen",
+				"value": "dev.frozencloud.frozen.Frozen",
 				"adapter": "kotlin"
 			}
 		]

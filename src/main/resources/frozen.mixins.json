@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "dev.frozencloud.frozencloud.mixin",
+  "package": "dev.frozencloud.frozen.mixin",
   "compatibilityLevel": "JAVA_21",
   "injectors": {
     "defaultRequire": 1
@@ -9,6 +9,11 @@
     "requireAnnotations": true
   },
   "client": [
-    "PerspectiveMixin"
+    "ClientPlayerEntityMixin",
+    "EntityRenderDispatcherMixin",
+    "InGameOverlayRendererMixin",
+    "ParticleManagerMixin",
+    "PerspectiveMixin",
+    "BossBarMixin"
   ]
 }

@@ -2,6 +2,7 @@ plugins {
 	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 	id 'maven-publish'
 	id "org.jetbrains.kotlin.jvm" version "2.3.0"
+	id "org.jetbrains.kotlin.plugin.serialization" version "2.3.0"
 }
 
 version = project.mod_version
@@ -22,6 +23,9 @@ repositories {
         name = "meteor-maven"
         url = "https://maven.meteordev.org/releases"
     }
+    
+    maven { url 'https://repo.hypixel.net/repository/Hypixel/' }
+    maven { url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
 }
 
 dependencies {
@@ -36,6 +40,14 @@ dependencies {
 
     // Orbit
     implementation "meteordevelopment:orbit:${project.orbit_version}"
+    
+    // Kotlin serlialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${project.kotlin_serialization_version}")
+    
+    // Hypixel mod api
+    implementation "net.hypixel:mod-api:${project.hypixel_mod_api_version}"
+    
+    modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.1")
 }
 
 processResources {
