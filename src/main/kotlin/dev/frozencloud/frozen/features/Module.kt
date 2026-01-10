@@ -1,6 +1,6 @@
 package dev.frozencloud.frozen.features.impl
 
-import clickGui.settings.Setting
+import dev.frozencloud.frozen.clickGui.settings.Setting
 import dev.frozencloud.frozen.Frozen
 
 abstract class Module(
