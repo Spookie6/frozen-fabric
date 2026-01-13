@@ -1,6 +1,6 @@
 package clickGui.settings.impl
 
-import clickGui.settings.Setting
+import dev.frozencloud.frozen.clickGui.settings.Setting
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 

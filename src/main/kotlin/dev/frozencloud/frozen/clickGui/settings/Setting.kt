@@ -1,4 +1,4 @@
-package clickGui.settings
+package dev.frozencloud.frozen.clickGui.settings
 
 import dev.frozencloud.frozen.Frozen
 import kotlin.properties.PropertyDelegateProvider

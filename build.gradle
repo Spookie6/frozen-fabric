@@ -26,6 +26,7 @@ repositories {
     
     maven { url 'https://repo.hypixel.net/repository/Hypixel/' }
     maven { url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -48,6 +49,8 @@ dependencies {
     implementation "net.hypixel:mod-api:${project.hypixel_mod_api_version}"
     
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.1")
+
+    modImplementation 'com.github.Synnerz:barrl:1.21.5-SNAPSHOT'
 }
 
 processResources {

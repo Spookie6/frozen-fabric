@@ -1,6 +1,6 @@
 package clickGui.settings
 
-import org.spongepowered.asm.mixin.injection.Desc
+import dev.frozencloud.frozen.clickGui.settings.Setting
 
 abstract class RenderableSetting<T>(
     name: String,

@@ -1,6 +1,8 @@
-package dev.frozencloud.frozen.features.impl
+package dev.frozencloud.frozen.features
 
+import dev.frozencloud.frozen.Frozen
 import dev.frozencloud.frozen.events.impl.TickEvent
+import dev.frozencloud.frozen.features.Module
 import dev.frozencloud.frozen.features.impl.test.Test
 import meteordevelopment.orbit.EventHandler
 import net.minecraft.network.packet.Packet
@@ -19,6 +21,10 @@ object ModuleManager {
     val modules: ArrayList<Module> = arrayListOf(
         Test
     )
+
+    init {
+        modules.forEach(Frozen.EVENT_BUS::subscribe)
+    }
 
     @EventHandler
     fun onTick(event: TickEvent.ClientTickEvent) {

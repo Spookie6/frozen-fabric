@@ -2,8 +2,7 @@ package dev.frozencloud.frozen
 
 import dev.frozencloud.frozen.commands.impl.ConfigCommand
 import dev.frozencloud.frozen.events.EventDispatcher
-import dev.frozencloud.frozen.features.impl.ModuleManager
-import dev.frozencloud.frozen.features.impl.test.Test
+import dev.frozencloud.frozen.features.ModuleManager
 import dev.frozencloud.frozen.util.overlay.OverlayManager
 import dev.frozencloud.frozen.util.render.RenderUtil
 import dev.frozencloud.frozen.util.skyblock.LocationUtil

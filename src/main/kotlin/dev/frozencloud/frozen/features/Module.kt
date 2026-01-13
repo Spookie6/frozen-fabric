@@ -1,7 +1,8 @@
-package dev.frozencloud.frozen.features.impl
+package dev.frozencloud.frozen.features
 
 import dev.frozencloud.frozen.clickGui.settings.Setting
 import dev.frozencloud.frozen.Frozen
+import kotlin.reflect.KProperty1
 
 abstract class Module(
     val name: String,
@@ -10,7 +11,7 @@ abstract class Module(
 ) {
     val settings: List<Setting<*>> by lazy {
         this::class.members
-            .filterIsInstance<kotlin.reflect.KProperty1<Module, *>>()
+            .filterIsInstance<KProperty1<Module, *>>()
             .mapNotNull { prop ->
                 val value = prop.get(this)
                 value as? Setting<*>
