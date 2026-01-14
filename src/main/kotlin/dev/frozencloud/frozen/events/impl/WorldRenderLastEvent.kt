@@ -1,5 +1,6 @@
 package dev.frozencloud.frozen.events.impl
 
 import dev.frozencloud.frozen.events.Event
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext
 
-class WorldRenderLastEvent : Event() {}
+data class WorldRenderLastEvent(val context: WorldRenderContext) : Event()

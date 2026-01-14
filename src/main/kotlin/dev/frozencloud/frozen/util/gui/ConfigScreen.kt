@@ -1,16 +1,16 @@
 package dev.frozencloud.frozen.util.gui
 
 import dev.frozencloud.frozen.util.overlay.OverlayManager
-import net.minecraft.client.gui.screen.Screen
-import net.minecraft.text.Text
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.Component
 
-class ConfigScreen : Screen(Text.literal("Config")) {
+class ConfigScreen : Screen(Component.literal("Frozen config screen")) {
     override fun init() {
         super.init()
     }
 
-    override fun close() {
-        super.close()
+    override fun onClose() {
+        super.onClose()
         OverlayManager.saveConfigs()
     }
 }

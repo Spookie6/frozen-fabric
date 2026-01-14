@@ -5,7 +5,7 @@ import dev.frozencloud.frozen.events.impl.TickEvent
 import dev.frozencloud.frozen.features.Module
 import dev.frozencloud.frozen.features.impl.test.Test
 import meteordevelopment.orbit.EventHandler
-import net.minecraft.network.packet.Packet
+import net.minecraft.network.protocol.Packet
 import java.util.concurrent.CopyOnWriteArrayList
 
 object ModuleManager {
@@ -27,7 +27,7 @@ object ModuleManager {
     }
 
     @EventHandler
-    fun onTick(event: TickEvent.ClientTickEvent) {
+    fun onTick(event: TickEvent.Client) {
         if (event.phase != TickEvent.PHASE.START) return
         tickTaskTick()
     }

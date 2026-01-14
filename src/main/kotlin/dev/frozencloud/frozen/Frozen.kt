@@ -1,6 +1,6 @@
 package dev.frozencloud.frozen
 
-import dev.frozencloud.frozen.commands.impl.ConfigCommand
+import dev.frozencloud.frozen.commands.impl.MainCommand
 import dev.frozencloud.frozen.events.EventDispatcher
 import dev.frozencloud.frozen.features.ModuleManager
 import dev.frozencloud.frozen.util.overlay.OverlayManager
@@ -12,16 +12,18 @@ import meteordevelopment.orbit.IEventBus
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.hypixel.modapi.HypixelModAPI
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft
 import org.slf4j.LoggerFactory
 import java.lang.invoke.MethodHandles
 import java.util.*
 
 object Frozen : ModInitializer {
+
+    @JvmStatic
     private val logger = LoggerFactory.getLogger("frozen")
 
     @JvmStatic
-    val mc: MinecraftClient = MinecraftClient.getInstance()
+    val mc: Minecraft = Minecraft.getInstance()
 
     @JvmStatic
     val hma: HypixelModAPI = HypixelModAPI.getInstance()
@@ -42,7 +44,7 @@ object Frozen : ModInitializer {
 	override fun onInitialize() {
         logger.info("Initializing Frozen...")
 
-        EVENT_BUS.registerLambdaFactory("dev.frozencloud") { lookupInMethod, klass ->
+        EVENT_BUS.registerLambdaFactory("dev.frozencloud.frozen") { lookupInMethod, klass ->
             lookupInMethod.invoke(null, klass, MethodHandles.lookup()) as MethodHandles.Lookup
         }
 
@@ -52,7 +54,7 @@ object Frozen : ModInitializer {
         registerModules()
 
         val cre = ClientCommandRegistrationCallback.EVENT
-        cre.register(ConfigCommand::register)
+        cre.register(MainCommand::register)
 	}
 
     fun registerModules() {
@@ -61,7 +63,8 @@ object Frozen : ModInitializer {
             LocationUtil,
             RenderUtil,
             OverlayManager,
-            ModuleManager
+            ModuleManager,
+            EventDispatcher
         )
 
         modules.forEach(EVENT_BUS::subscribe)

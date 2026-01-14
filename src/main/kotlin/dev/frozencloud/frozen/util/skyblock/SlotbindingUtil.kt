@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import java.io.File
 
 object SlotbindingUtil {
-    private val FILE = File(mc.runDirectory, "config/frozen/slot_bindings.json")
+    private val FILE = File(mc.gameDirectory, "config/frozen/slot_bindings.json")
 
     val bindingsMap = mutableMapOf<String, Slotbindings>()
     var currentBindings = Slotbindings(slots = mutableMapOf<Int, Int>())

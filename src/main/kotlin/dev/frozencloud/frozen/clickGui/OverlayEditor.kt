@@ -1,40 +1,39 @@
-package clickGui
+package dev.frozencloud.frozen.clickGui
 
-import dev.frozencloud.frozen.util.ChatUtil
 import dev.frozencloud.frozen.util.overlay.OverlayManager
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.screen.Screen
-import net.minecraft.text.Text
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.network.chat.Component
 
-class OverlayEditor : Screen(Text.literal("Overlay editor")) {
+class OverlayEditor : Screen(Component.literal("Frozen overlay editor")) {
 
     override fun init() {
         OverlayManager.setEditMode(true)
     }
 
-    override fun close() {
-        super.close()
+    override fun onClose() {
+        super.onClose()
         OverlayManager.setEditMode(false)
         OverlayManager.saveConfigs()
     }
 
-    override fun render(context: DrawContext?, mouseX: Int, mouseY: Int, deltaTicks: Float) {}
-
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (button == 0) {
-            OverlayManager.getHoveredOverlay(mouseX, mouseY)?.startDragging(mouseX, mouseY)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        if (mouseButtonEvent.button() == 0) {
+            OverlayManager.getHoveredOverlay(mouseButtonEvent.x, mouseButtonEvent.y)?.startDragging(mouseButtonEvent.x, mouseButtonEvent.y)
         }
+        super.mouseClicked(mouseButtonEvent, bl)
         return true
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        OverlayManager.getHoveredOverlay(mouseX, mouseY)?.onMouseDragged(mouseX, mouseY)
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
+        OverlayManager.getHoveredOverlay(mouseButtonEvent.x, mouseButtonEvent.y)?.onMouseDragged(mouseButtonEvent.x, mouseButtonEvent.y)
 
+        super.mouseDragged(mouseButtonEvent, deltaX, deltaY)
         return true
     }
 
-    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        OverlayManager.getHoveredOverlay(mouseX, mouseY)?.stopDragging()
+    override fun mouseReleased(mouseButtonEvent: MouseButtonEvent): Boolean {
+        OverlayManager.getHoveredOverlay(mouseButtonEvent.x, mouseButtonEvent.y)?.stopDragging()
         return true
     }
 

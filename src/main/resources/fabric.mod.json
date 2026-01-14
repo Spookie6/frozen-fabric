@@ -3,9 +3,10 @@
 	"id": "frozen",
 	"version": "${version}",
 	"name": "frozen",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Fun lil skyblock mod",
 	"authors": [
-		"Me!"
+		"Rico",
+        "Sam"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
@@ -27,7 +28,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.18.4",
-		"minecraft": "~1.21.5",
+		"minecraft": "~1.21.10",
 		"java": ">=21",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*"

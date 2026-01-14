@@ -1,4 +1,4 @@
-package clickGui.settings.impl
+package dev.frozencloud.frozen.clickGui.settings.impl
 
 import dev.frozencloud.frozen.clickGui.settings.Setting
 import kotlin.properties.ReadWriteProperty

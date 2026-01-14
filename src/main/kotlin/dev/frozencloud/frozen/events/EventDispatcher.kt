@@ -1,62 +1,56 @@
 package dev.frozencloud.frozen.events
 
-import dev.frozencloud.frozen.events.impl.ChatEvent
-import dev.frozencloud.frozen.events.impl.ConnectionEvent
+import dev.frozencloud.frozen.Frozen.mc
+import dev.frozencloud.frozen.events.impl.ChatPacketEvent
 import dev.frozencloud.frozen.events.impl.HudRenderEvent
+import dev.frozencloud.frozen.events.impl.PacketEvent
 import dev.frozencloud.frozen.events.impl.TickEvent
 import dev.frozencloud.frozen.events.impl.WorldEvent
 import dev.frozencloud.frozen.events.impl.WorldRenderLastEvent
+import dev.frozencloud.frozen.util.Util.noControlCodes
+import meteordevelopment.orbit.EventHandler
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.network.ClientPlayNetworkHandler
-import net.minecraft.text.Text
+import net.minecraft.network.protocol.common.ClientboundPingPacket
+import net.minecraft.network.protocol.game.ClientboundSystemChatPacket
 
 object EventDispatcher {
     fun init() {
-        ClientTickEvents.START_CLIENT_TICK.register { _ ->
-            TickEvent.ClientTickEvent(TickEvent.PHASE.START).post()
-        }
-        ClientTickEvents.END_CLIENT_TICK.register { _ ->
-            TickEvent.ClientTickEvent(TickEvent.PHASE.END).post()
-        }
+        // Client tick events
+        ClientTickEvents.START_CLIENT_TICK.register { _ -> TickEvent.Client(TickEvent.PHASE.START).post() }
+        ClientTickEvents.END_CLIENT_TICK.register { _ -> TickEvent.Client(TickEvent.PHASE.END).post() }
 
-        ServerTickEvents.START_SERVER_TICK.register { _ ->
-            TickEvent.WorldTickEvent(TickEvent.PHASE.START).post()
-        }
-        ServerTickEvents.END_SERVER_TICK.register { _ ->
-            TickEvent.WorldTickEvent(TickEvent.PHASE.END).post()
-        }
+        // World events
+        ClientPlayConnectionEvents.JOIN.register { _, _, _ -> WorldEvent.Load().post() }
+        ClientPlayConnectionEvents.DISCONNECT.register { _, _ -> WorldEvent.Unload().post() }
 
-        ClientReceiveMessageEvents.ALLOW_GAME.register { message, overlay ->
-            if (!overlay) {
-                return@register !ChatEvent.AllowChat(message).post()
-            }
-            return@register true
-        }
-        ClientReceiveMessageEvents.MODIFY_GAME.register { message, overlay ->
-            if (!overlay)
-                return@register ChatEvent.ModifyChat(message).post()
-            return@register Text.literal("")
-        }
-
+        // Render events
         HudRenderCallback.EVENT.register { drawContext, renderTickCounter -> HudRenderEvent(drawContext, renderTickCounter).post() }
+        WorldRenderEvents.END_MAIN.register { context -> mc.level?.let { WorldRenderLastEvent(context).post() } }
 
-        ServerWorldEvents.LOAD.register { server, world -> WorldEvent.Load(server, world).post() }
-        ServerWorldEvents.UNLOAD.register { server, world -> WorldEvent.Unload(server, world).post() }
+        @EventHandler
+        fun onPacket(event: PacketEvent.Received) {
+            if (event.packet is ClientboundPingPacket) TickEvent.Server().post()
+            val eventToPost: Event? = when (event.packet) {
+                is ClientboundPingPacket -> if (event.packet.id != 0) TickEvent.Server() else null
+                is ClientboundSystemChatPacket -> {
+                    if (!event.packet.overlay) ChatPacketEvent(
+                        event.packet.content.string.noControlCodes,
+                        event.packet.content
+                    ) else null
+                }
 
-        WorldRenderEvents.LAST.register { context -> WorldRenderLastEvent().post() }
+                else -> return
+            } as? Event
 
-        ClientPlayConnectionEvents.JOIN.register { handler: ClientPlayNetworkHandler, sender, client: MinecraftClient ->
-            ConnectionEvent.ServerConnectEvent(handler).post()
-        }
-        ClientPlayConnectionEvents.DISCONNECT.register { handler: ClientPlayNetworkHandler, client: MinecraftClient ->
-            ConnectionEvent.ServerDisconnectEvent(handler).post()
+            eventToPost?.let {
+                if (it is CancellableEvent && it.post()) event.cancel()
+                else it.post()
+            }
         }
     }
 }

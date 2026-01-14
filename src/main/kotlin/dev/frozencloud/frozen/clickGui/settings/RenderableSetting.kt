@@ -1,6 +1,4 @@
-package clickGui.settings
-
-import dev.frozencloud.frozen.clickGui.settings.Setting
+package dev.frozencloud.frozen.clickGui.settings
 
 abstract class RenderableSetting<T>(
     name: String,

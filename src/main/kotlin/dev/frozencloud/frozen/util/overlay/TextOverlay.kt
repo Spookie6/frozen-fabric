@@ -1,10 +1,11 @@
 package dev.frozencloud.frozen.util.overlay
 
+import com.mojang.math.MatrixUtil
 import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.util.render.Colors
 import dev.frozencloud.frozen.util.skyblock.Island
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.render.RenderTickCounter
+import net.minecraft.client.DeltaTracker
+import net.minecraft.client.gui.GuiGraphics
 
 class TextOverlay(configName: String, renderCondition: () -> Boolean, islands: List<Island>, val textSupplier: () -> String, val exampleText: String) : Overlay(configName, renderCondition, islands) {
     inline val text: String
@@ -14,7 +15,7 @@ class TextOverlay(configName: String, renderCondition: () -> Boolean, islands: L
 
     var lastText = ""
 
-    override fun render(drawContext: DrawContext, renderTickCounter: RenderTickCounter) {
+    override fun render(context: GuiGraphics, renderTickCounter: DeltaTracker) {
         if (!shouldRender) return
         if (lastText != text) {
             dimensions = calculateDimensions()
@@ -22,27 +23,29 @@ class TextOverlay(configName: String, renderCondition: () -> Boolean, islands: L
         }
         val lines = text.split("\n")
 
-        drawContext.matrices.push()
-        drawContext.matrices.translate(config.x.toDouble(), config.y.toDouble(), 0.0)
+        context.pose().pushMatrix()
+        context.pose().translate(config.x.toFloat(), config.y.toFloat())
 
         if (inEditMode) {
-            drawContext.drawBorder(0, 0,
-                (dimensions.width * config.scale).toInt(), (dimensions.height * config.scale).toInt(), Colors.WHITE.rgba)
+            context.fill(config.x, config.y, config.x + dimensions.width, config.y + 1, Colors.WHITE.rgba)
+            context.fill(config.x, config.y, config.x + dimensions.width, config.y + 1, Colors.WHITE.rgba)
+            context.fill(config.x, config.y, config.x + dimensions.width, config.y + 1, Colors.WHITE.rgba)
+            context.fill(config.x, config.y, config.x + dimensions.width, config.y + 1, Colors.WHITE.rgba)
         }
 
-        drawContext.matrices.scale(config.scale, config.scale, 1f)
+        context.pose().scale(config.scale, config.scale)
 
         for (index in lines.indices) {
             val line = lines[index]
-            drawContext.drawText(mc.textRenderer, line, 0,(mc.textRenderer.fontHeight + LINE_PADDING) * index, config.color, config.shadow)
+            context.drawString(mc.font, line, 0,(mc.font.lineHeight + LINE_PADDING) * index, config.color, config.shadow)
         }
-        drawContext.matrices.pop()
+        context.pose().popMatrix()
     }
 
     override fun calculateDimensions(): Dimensions {
         val lines = text.split("\n")
 
-        val height = mc.textRenderer.fontHeight * lines.size + (lines.size - 1 * LINE_PADDING)
+        val height = mc.font.lineHeight * lines.size + (lines.size - 1 * LINE_PADDING)
         var maxWidth = 0
 
         for (line: String in lines) {
@@ -60,7 +63,7 @@ class TextOverlay(configName: String, renderCondition: () -> Boolean, islands: L
                     continue
                 }
 
-                var charWidth = mc.textRenderer.getWidth(c.toString())
+                var charWidth = mc.font.width(c.toString())
                 if (bold) charWidth++
 
                 lineWidth += charWidth

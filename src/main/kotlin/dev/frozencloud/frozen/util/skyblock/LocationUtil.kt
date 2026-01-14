@@ -1,13 +1,14 @@
 package dev.frozencloud.frozen.util.skyblock
 
 import dev.frozencloud.frozen.Frozen.hma
+import dev.frozencloud.frozen.Frozen.mc
 import net.hypixel.modapi.packet.impl.clientbound.ClientboundHelloPacket
 import net.hypixel.modapi.packet.impl.clientbound.ClientboundPartyInfoPacket
 import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket
 
 object LocationUtil {
     var currentIsland: Island? = Island.Unknown
-    var onHypixel: Boolean = false
+    val onHypixel: Boolean get() = mc.currentServer?.ip?.contains("hypixel.net") == true
 
     init {
         hma.subscribeToEventPacket(ClientboundLocationPacket::class.java)
@@ -28,10 +29,4 @@ object LocationUtil {
     fun handlePartyInfoPacket(packet: ClientboundPartyInfoPacket) {
         println(packet.toString())
     }
-
-//    @EventHandler
-//    fun onClientJoinServer(event: ConnectionEvent.ServerConnectEvent) {
-//        val ip = event.handler.connection.address.toString()
-//        onHypixel = ip.contains("hypixel.net")
-//    }
 }

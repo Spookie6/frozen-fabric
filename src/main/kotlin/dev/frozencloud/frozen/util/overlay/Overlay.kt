@@ -2,8 +2,9 @@ package dev.frozencloud.frozen.util.overlay
 
 import dev.frozencloud.frozen.util.skyblock.Island
 import dev.frozencloud.frozen.util.skyblock.LocationUtil
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.render.RenderTickCounter
+import net.minecraft.client.DeltaTracker
+import net.minecraft.client.gui.GuiGraphics
+import java.awt.image.renderable.RenderContext
 import kotlin.math.max
 import kotlin.math.min
 
@@ -25,7 +26,7 @@ abstract class Overlay(var configName: String, val renderCondition: () -> Boolea
         configName = configName.replace(" ", "_")
     }
 
-    abstract fun render(drawContext: DrawContext, renderTickCounter: RenderTickCounter)
+    abstract fun render(context: GuiGraphics, renderTickCounter: DeltaTracker)
     abstract fun calculateDimensions(): Dimensions
 
     inline val shouldRender: Boolean

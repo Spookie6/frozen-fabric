@@ -9,11 +9,18 @@
     "requireAnnotations": true
   },
   "client": [
-    "ClientPlayerEntityMixin",
-    "EntityRenderDispatcherMixin",
-    "InGameOverlayRendererMixin",
-    "ParticleManagerMixin",
-    "PerspectiveMixin",
-    "BossBarMixin"
+    "MixinAbstractContainerScreen",
+    "MixinAbstractSignEditScreen",
+    "MixinClientLevel",
+    "MixinConnection",
+    "MixinEffectRenderer",
+    "MixinEffectsInInventory",
+    "MixinEntityRenderDispatcher",
+    "MixinLocalPlayer",
+    "MixinPerspective",
+    "MixinScreen"
+  ],
+  "mixins": [
+    "MixinInGameHud"
   ]
 }

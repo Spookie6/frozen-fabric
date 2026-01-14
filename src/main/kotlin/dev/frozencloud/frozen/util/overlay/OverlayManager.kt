@@ -10,7 +10,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 object OverlayManager {
-    private val FILE = File(mc.runDirectory, "config/frozen/overlays.json")
+    private val FILE = File(mc.gameDirectory, "config/frozen/overlays.json")
 
     private val overlays = mutableListOf<Overlay>()
     private val configMap = mutableMapOf<String, Config>()
@@ -75,8 +75,8 @@ object OverlayManager {
     }
 
     fun getScaledScreen(): Overlay.Dimensions {
-        val width = mc.window.scaledWidth
-        val height = mc.window.scaledHeight
+        val width = mc.window.guiScaledWidth
+        val height = mc.window.guiScaledHeight
         return Overlay.Dimensions(width, height)
     }
 
