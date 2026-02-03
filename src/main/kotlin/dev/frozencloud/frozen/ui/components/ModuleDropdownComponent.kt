@@ -1,0 +1,90 @@
+package dev.frozencloud.frozen.ui.components
+
+import dev.frozencloud.frozen.features.Module
+import dev.frozencloud.frozen.ui.settings.RenderableSetting
+import dev.frozencloud.frozen.util.render.Colors
+import dev.frozencloud.frozen.util.ui.MouseUtil
+import dev.frozencloud.frozen.util.ui.MouseUtil.isAreaHovered
+import dev.frozencloud.frozen.util.ui.animations.ColorAnimation
+import dev.frozencloud.frozen.util.ui.animations.EaseOutAnimation
+import dev.frozencloud.frozen.util.ui.rendering.NanoVGHelper
+import net.minecraft.client.input.MouseButtonEvent
+import kotlin.math.exp
+
+class ModuleDropdownComponent(val module: Module) {
+    var lastX = 0f
+    var lastY = 0f
+
+    private var expanded = false
+
+    private val anim = EaseOutAnimation(350)
+    private val colorAnim = ColorAnimation(150)
+
+    val renderableSettings = module.settings.values.mapNotNull { setting -> setting as? RenderableSetting }
+
+    companion object {
+        const val WIDTH = 650f
+        const val HEIGHT = 48f
+        const val PADDING = 12f
+    }
+
+    val textWidth by lazy { NanoVGHelper.textWidth(module.name, 24f, NanoVGHelper.defaultFont) }
+
+    fun draw(x: Float, y: Float): Float {
+        lastX = x
+        lastY = y
+
+        var extraHeight = 0f
+        if (expanded || anim.isAnimating()) {
+            extraHeight = anim.get(0f, PADDING * 2 + renderableSettings.filter { it.isVisible }.size * 40f, !expanded)
+            NanoVGHelper.roundedRect(
+                x,
+                y,
+                WIDTH,
+                HEIGHT + extraHeight,
+                16f,
+                Colors.BackgroundDarker.rgba
+            )
+
+            NanoVGHelper.scissor(x, y + HEIGHT, WIDTH, extraHeight + 1)
+            renderableSettings.filter{ it.isVisible }.forEachIndexed { index, setting ->
+                setting.render(x + PADDING, y + HEIGHT + PADDING + (40f * index), x + WIDTH - PADDING, MouseUtil.mouseX, MouseUtil.mouseY)
+            }
+            NanoVGHelper.resetScissor()
+        }
+
+        val color = when {
+            colorAnim.isAnimating() -> colorAnim.get(Colors.DisabledBackground, Colors.GlacialAccentDark, !module.enabled)
+            else -> if (module.enabled) Colors.GlacialAccentDark else Colors.DisabledBackground
+        }.rgba
+
+        NanoVGHelper.roundedRect(
+            x,
+            y,
+            WIDTH,
+            HEIGHT,
+            16f,
+            color
+        )
+
+        NanoVGHelper.text(NanoVGHelper.defaultFont, module.name, x + PADDING, y + 12f, 24f, Colors.TextPrimary.rgba)
+        NanoVGHelper.text(NanoVGHelper.defaultFont, module.description, x + textWidth + PADDING + 8f, y + 16f, 18f, Colors.TextMuted.rgba)
+
+        return extraHeight
+    }
+
+    fun onMouseClicked(mouseButtonEvent: MouseButtonEvent) {
+        if (isHovered && mouseButtonEvent.button() == 0) {
+            module.toggle()
+            if (!colorAnim.isAnimating()) colorAnim.start()
+        }
+        if (isHovered && mouseButtonEvent.button() == 1) {
+            expanded = !expanded
+            anim.start()
+        }
+
+        renderableSettings.forEach { it.mouseClicked(mouseButtonEvent) }
+    }
+
+    val isHovered: Boolean get() = isAreaHovered(lastX, lastY, WIDTH, HEIGHT, true)
+}

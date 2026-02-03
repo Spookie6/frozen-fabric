@@ -6,6 +6,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/*
+    No selfie cam
+ */
 @Mixin(CameraType.class)
 public class MixinPerspective {
 	@Inject(method = "cycle", at = @At("HEAD"), cancellable = true)

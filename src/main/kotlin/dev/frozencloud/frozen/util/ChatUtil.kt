@@ -1,7 +1,6 @@
 package dev.frozencloud.frozen.util
 
 import dev.frozencloud.frozen.Frozen.mc
-import dev.frozencloud.frozen.util.Util.noControlCodes
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 

@@ -1,20 +1,13 @@
 package dev.frozencloud.frozen.events
 
 import dev.frozencloud.frozen.Frozen.mc
-import dev.frozencloud.frozen.events.impl.ChatPacketEvent
-import dev.frozencloud.frozen.events.impl.HudRenderEvent
-import dev.frozencloud.frozen.events.impl.PacketEvent
-import dev.frozencloud.frozen.events.impl.TickEvent
-import dev.frozencloud.frozen.events.impl.WorldEvent
-import dev.frozencloud.frozen.events.impl.WorldRenderLastEvent
-import dev.frozencloud.frozen.util.Util.noControlCodes
+import dev.frozencloud.frozen.events.impl.*
+import dev.frozencloud.frozen.util.noControlCodes
 import meteordevelopment.orbit.EventHandler
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents
 import net.minecraft.network.protocol.common.ClientboundPingPacket
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket
 
@@ -30,7 +23,8 @@ object EventDispatcher {
 
         // Render events
         HudRenderCallback.EVENT.register { drawContext, renderTickCounter -> HudRenderEvent(drawContext, renderTickCounter).post() }
-        WorldRenderEvents.END_MAIN.register { context -> mc.level?.let { WorldRenderLastEvent(context).post() } }
+        WorldRenderEvents.END_MAIN.register { context -> mc.level?.let { WorldRenderEvent.Last(context).post() } }
+        WorldRenderEvents.END_EXTRACTION.register { handler -> mc.level?.let { WorldRenderEvent.Extract(handler).post() } }
 
         @EventHandler
         fun onPacket(event: PacketEvent.Received) {

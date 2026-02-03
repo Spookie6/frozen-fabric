@@ -13,14 +13,18 @@
     "MixinAbstractSignEditScreen",
     "MixinClientLevel",
     "MixinConnection",
-    "MixinEffectRenderer",
     "MixinEffectsInInventory",
     "MixinEntityRenderDispatcher",
+    "MixinItemRenderer",
     "MixinLocalPlayer",
+    "MixinMinecraft",
+    "MixinMobEffectInstance",
+    "MixinMouseHandler",
     "MixinPerspective",
-    "MixinScreen"
+    "MixinScreen",
+    "MixinScreenEffectRenderer"
   ],
   "mixins": [
-    "MixinInGameHud"
+    "MixinLivingEntity"
   ]
 }

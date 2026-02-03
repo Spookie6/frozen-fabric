@@ -1,6 +1,19 @@
 package dev.frozencloud.frozen.util
 
-object Util {
-    val String.noControlCodes: String
-        get() = replace("§.".toRegex(), "")
+import dev.frozencloud.frozen.Frozen.mc
+import dev.frozencloud.frozen.util.ui.rendering.NanoVGHelper
+import kotlin.math.max
+
+val String.noControlCodes: String
+    get() = replace("§.".toRegex(), "")
+
+fun getStandardGuiScale(): Float {
+    val verticalScale = (mc.window.height.toFloat() / 1080f) / NanoVGHelper.devicePixelRatio()
+    val horizontalScale = (mc.window.width.toFloat() / 1920f) / NanoVGHelper.devicePixelRatio()
+    return max(verticalScale, horizontalScale).coerceIn(1f, 3f)
+}
+
+inline fun <reified T: Enum<T>> T.next(): T {
+    val vals = enumValues<T>()
+    return vals[(this.ordinal + 1) % vals.size]
 }

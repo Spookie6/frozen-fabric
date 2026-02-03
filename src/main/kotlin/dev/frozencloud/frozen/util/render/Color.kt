@@ -1,11 +1,13 @@
 package dev.frozencloud.frozen.util.render
 
 import com.google.gson.*
+import dev.frozencloud.frozen.util.render.Color.Companion.brighter
+import dev.frozencloud.frozen.util.render.Color.Companion.darker
+import dev.frozencloud.frozen.util.render.Color.Companion.hover
 import java.awt.Color.HSBtoRGB
 import java.awt.Color.RGBtoHSB
 import java.lang.reflect.Type
 
-// Thanks subatomic and odin <3
 class Color(hue: Float, saturation: Float, brightness: Float, alpha: Float = 1f) {
     constructor(hsb: FloatArray, alpha: Float = 1f) : this(hsb[0], hsb[1], hsb[2], alpha)
     constructor(r: Int, g: Int, b: Int, alpha: Float = 1f) : this(RGBtoHSB(r, g, b, FloatArray(size = 3)), alpha)
@@ -156,7 +158,6 @@ class Color(hue: Float, saturation: Float, brightness: Float, alpha: Float = 1f)
 }
 
 object Colors {
-
     @JvmField val MINECRAFT_DARK_BLUE = Color(0, 0, 170)
     @JvmField val MINECRAFT_DARK_GREEN = Color(0, 170, 0)
     @JvmField val MINECRAFT_DARK_AQUA = Color(0, 170, 170)
@@ -174,7 +175,38 @@ object Colors {
     @JvmField val WHITE = Color(255, 255, 255)
     @JvmField val BLACK = Color(0, 0, 0)
     @JvmField val TRANSPARENT = Color(0, 0, 0, 0f)
-
-    @JvmField val gray38 = Color(38, 38, 38)
+    @JvmField val gray21 = Color(21, 21, 21)
     @JvmField val gray26 = Color(26, 26, 26)
+    @JvmField val gray38 = Color(38, 38, 38)
+
+    // Base theme - glacial cyan (your default accent)
+    @JvmField val GlacialAccent = Color(172, 234, 255)         // #aceeff
+    @JvmField val GlacialAccentLight = Color(208, 245, 255)    // #d0f5ff   (glow/hover variant)
+    @JvmField val GlacialAccentDark = Color(122, 190, 212)     // #7abed4   (pressed/active)
+
+    @JvmField val Background = Color(15, 20, 26)               // #0f141a   very dark blue-gray
+    @JvmField val Surface = Color(21, 27, 34)                  // #151b22   cards, panels, inputs
+    @JvmField val SurfaceElevated = Color(28, 37, 46)          // #1c252e   hover, selected, active tab
+    @JvmField val Border = Color(42, 55, 69)                   // #2a3745   dividers, input borders
+
+    // Text
+    @JvmField val TextPrimary = Color(232, 245, 251)           // #e8f5fb   main text (near-white with ice tint)
+    @JvmField val TextSecondary = Color(163, 196, 210)         // #a3c4d2   labels, descriptions
+    @JvmField val TextMuted = Color(107, 130, 150)             // #6b8296   placeholders, hints
+
+    // Semantic / feedback colors (kept in cold tones)
+    @JvmField val Success = Color(140, 255, 170)               // #8cffaa   enabled, saved
+    @JvmField val Warning = Color(255, 208, 128)               // #ffd080   attention
+    @JvmField val Error = Color(255, 138, 156)                 // #ff8a9c   error/danger
+
+    // Disabled states
+    @JvmField val DisabledBackground = Color(58, 74, 88)       // #3a4a58
+    @JvmField val DisabledContent = Color(120, 144, 156)       // #78909c
+
+    // Quick derived versions using your extension functions (optional)
+    @JvmField val GlacialAccentHover = GlacialAccent.hover(1.25f)
+    @JvmField val GlacialAccentBrighter = GlacialAccent.brighter(1.4f)
+    @JvmField val GlacialAccentDarker = GlacialAccent.darker(0.65f)
+    @JvmField val SurfaceHover = SurfaceElevated.brighter(1.15f)
+    @JvmField val BackgroundDarker = Background.darker(0.8f)
 }

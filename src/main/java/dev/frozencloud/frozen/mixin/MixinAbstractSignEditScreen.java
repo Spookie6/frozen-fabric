@@ -23,6 +23,11 @@ public abstract class MixinAbstractSignEditScreen {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     public void frozen$onKeyPressed(KeyEvent keyEvent, CallbackInfoReturnable<Boolean> cir) {
+        if (keyEvent.key() == GLFW.GLFW_KEY_ENTER) {
+            ((AbstractSignEditScreen) (Object) this).onClose();
+            cir.cancel();
+        }
+
         if (keyEvent.key() == GLFW.GLFW_KEY_C && keyEvent.hasControlDown()) {
             signField.insertText(mc.keyboardHandler.getClipboard());
             cir.cancel();

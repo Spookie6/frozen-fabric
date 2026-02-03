@@ -1,43 +1,53 @@
 package dev.frozencloud.frozen.util.overlay
 
-import com.mojang.math.MatrixUtil
 import dev.frozencloud.frozen.Frozen.mc
-import dev.frozencloud.frozen.util.render.Colors
+import dev.frozencloud.frozen.features.impl.rendering.Interface
+import dev.frozencloud.frozen.ui.settings.impl.BooleanSetting
+import dev.frozencloud.frozen.util.render.Color
 import dev.frozencloud.frozen.util.skyblock.Island
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.gui.GuiGraphics
 
-class TextOverlay(configName: String, renderCondition: () -> Boolean, islands: List<Island>, val textSupplier: () -> String, val exampleText: String) : Overlay(configName, renderCondition, islands) {
+class TextOverlay(
+    configName: String,
+    setting: BooleanSetting,
+    renderCondition: () -> Boolean,
+    islands: List<Island>,
+    val textSupplier: () -> String,
+    val exampleText: String
+) : Overlay(configName, setting, renderCondition, islands) {
     inline val text: String
         get() = runCatching {
             if (inEditMode) exampleText else textSupplier()
         }.getOrElse { "" }
 
-    var lastText = ""
+    var textCache = ""
 
     override fun render(context: GuiGraphics, renderTickCounter: DeltaTracker) {
         if (!shouldRender) return
-        if (lastText != text) {
+        if (textCache != text) {
             dimensions = calculateDimensions()
-            lastText = text
+            textCache = text
         }
         val lines = text.split("\n")
 
-        context.pose().pushMatrix()
-        context.pose().translate(config.x.toFloat(), config.y.toFloat())
-
         if (inEditMode) {
-            context.fill(config.x, config.y, config.x + dimensions.width, config.y + 1, Colors.WHITE.rgba)
-            context.fill(config.x, config.y, config.x + dimensions.width, config.y + 1, Colors.WHITE.rgba)
-            context.fill(config.x, config.y, config.x + dimensions.width, config.y + 1, Colors.WHITE.rgba)
-            context.fill(config.x, config.y, config.x + dimensions.width, config.y + 1, Colors.WHITE.rgba)
+            context.fill(config.x, config.y, config.x + scaledWidth + PADDING * 2, config.y + scaleHeight + PADDING * 2, Color(255, 255, 255, 125f).rgba)
         }
 
+        context.pose().pushMatrix()
+        context.pose().translate(config.x.toFloat(), config.y.toFloat())
         context.pose().scale(config.scale, config.scale)
 
         for (index in lines.indices) {
             val line = lines[index]
-            context.drawString(mc.font, line, 0,(mc.font.lineHeight + LINE_PADDING) * index, config.color, config.shadow)
+            context.drawString(mc.font,
+                line,
+                PADDING,
+                PADDING + (mc.font.lineHeight + LINE_PADDING) * index,
+                config.color,
+                Interface.overlayShadow
+            )
         }
         context.pose().popMatrix()
     }

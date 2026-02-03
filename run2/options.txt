@@ -15,7 +15,7 @@ prioritizeChunkUpdates:0
 fullscreen:true
 graphicsMode:1
 guiScale:3
-maxFps:120
+maxFps:200
 inactivityFpsLimit:"afk"
 mipmapLevels:4
 narrator:0
@@ -50,12 +50,12 @@ sprintWindow:7
 darkMojangStudiosBackground:false
 hideLightningFlashes:false
 hideSplashTexts:false
-mouseSensitivity:0.5
+mouseSensitivity:0.43847931338028184
 damageTiltStrength:0.0
 highContrast:false
 highContrastBlockOutline:false
 narratorHotkey:true
-resourcePacks:["fabric"]
+resourcePacks:["vanilla","fabric","file/!      §fp§9rism §8[§f16§9x§8] [1.21].zip"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:en_us
@@ -77,7 +77,7 @@ chatWidth:1.0
 notificationDisplayTime:1.0
 useNativeTransport:true
 mainHand:"right"
-attackIndicator:2
+attackIndicator:0
 tutorialStep:none
 mouseWheelSensitivity:1.0
 rawMouseInput:true
@@ -121,8 +121,8 @@ key_key.fullscreen:key.keyboard.f11
 key_key.spectatorOutlines:key.keyboard.unknown
 key_key.spectatorHotbar:key.mouse.middle
 key_key.swapOffhand:key.keyboard.g
-key_key.saveToolbarActivator:key.keyboard.c
-key_key.loadToolbarActivator:key.keyboard.x
+key_key.saveToolbarActivator:key.keyboard.unknown
+key_key.loadToolbarActivator:key.keyboard.unknown
 key_key.advancements:key.keyboard.l
 key_key.quickActions:key.keyboard.unknown
 key_key.hotbar.1:key.keyboard.1
@@ -133,7 +133,7 @@ key_key.hotbar.5:key.keyboard.q
 key_key.hotbar.6:key.keyboard.r
 key_key.hotbar.7:key.mouse.5
 key_key.hotbar.8:key.mouse.4
-key_key.hotbar.9:key.keyboard.9
+key_key.hotbar.9:key.keyboard.x
 key_key.modmenu.open_menu:key.keyboard.unknown
 key_key.entityculling.toggle:key.keyboard.unknown
 key_key.entityculling.toggleBoxes:key.keyboard.unknown

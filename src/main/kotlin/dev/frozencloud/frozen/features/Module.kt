@@ -1,25 +1,21 @@
 package dev.frozencloud.frozen.features
 
-import dev.frozencloud.frozen.clickGui.settings.Setting
+import dev.frozencloud.frozen.ui.settings.Setting
 import dev.frozencloud.frozen.Frozen
-import kotlin.reflect.KProperty1
+import dev.frozencloud.frozen.ui.settings.RenderableSetting
+import org.lwjgl.glfw.GLFW
 
 abstract class Module(
     val name: String,
     @Transient var description: String,
-    toggled: Boolean = false,
+    val key: Int? = GLFW.GLFW_KEY_UNKNOWN,
+    category: Category? = null,
+    toggled: Boolean = false
 ) {
-    val settings: List<Setting<*>> by lazy {
-        this::class.members
-            .filterIsInstance<KProperty1<Module, *>>()
-            .mapNotNull { prop ->
-                val value = prop.get(this)
-                value as? Setting<*>
-            }
-    }
+    val settings: LinkedHashMap<String, Setting<*>> = linkedMapOf()
 
     @Transient
-    val category: Category = getCategory(this::class.java) ?: Category.GENERAL
+    val category: Category = getCategory(this::class.java)
 
     var enabled: Boolean = toggled
         private set
@@ -32,26 +28,26 @@ abstract class Module(
         Frozen.EVENT_BUS.unsubscribe(this)
     }
 
+    fun <K : Setting<*>> registerSetting(setting: K): K {
+        settings[setting.name] = setting
+        return setting
+    }
+
+    operator fun <K : Setting<*>> K.unaryPlus(): K = registerSetting(this)
+
     fun toggle() {
         enabled = !enabled
         if (enabled) onEnable()
         else onDisable()
     }
 
-    fun getSettingByName(name: String?): Setting<*>? {
-        for (setting in settings) {
-            if (setting.name.equals(name, ignoreCase = true)) {
-                return setting
-            }
-        }
-        return null
-    }
+    fun getSettingByName(name: String?): Setting<*>? = settings[name]
 
     protected inline val mc get() = Frozen.mc
 
     private companion object {
-        private fun getCategory(clazz: Class<out Module>): Category? =
-            Category.entries.find { clazz.`package`.name.contains(it.name, true) }
+        private fun getCategory(clazz: Class<out Module>): Category =
+            Category.entries.find { clazz.packageName.contains(it.name, true) } ?: Category.MISC
     }
 
     fun onMessage(filter: Regex, shouldRun: () -> Boolean = { enabled }, func: (MatchResult) -> Unit) {

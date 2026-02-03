@@ -5,18 +5,18 @@
 	"name": "frozen",
 	"description": "Fun lil skyblock mod",
 	"authors": [
-		"Rico",
+		"Enrico",
         "Sam"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://www.frozencloud.dev",
+		"sources": "https://github.com/spookie6/frozen-fabric"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/frozen/icon.png",
 	"environment": "client",
 	"entrypoints": {
-		"main": [
+		"client": [
 			{
 				"value": "dev.frozencloud.frozen.Frozen",
 				"adapter": "kotlin"

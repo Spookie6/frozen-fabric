@@ -1,9 +1,12 @@
 package dev.frozencloud.frozen.features
 
-import dev.frozencloud.frozen.Frozen
+import dev.frozencloud.frozen.config.ModulesConfig
 import dev.frozencloud.frozen.events.impl.TickEvent
-import dev.frozencloud.frozen.features.Module
+import dev.frozencloud.frozen.features.impl.rendering.Interface
+import dev.frozencloud.frozen.features.impl.test.EtherWarp
 import dev.frozencloud.frozen.features.impl.test.Test
+import dev.frozencloud.frozen.features.impl.test.Testing
+import dev.frozencloud.frozen.features.impl.test.TickTimers
 import meteordevelopment.orbit.EventHandler
 import net.minecraft.network.protocol.Packet
 import java.util.concurrent.CopyOnWriteArrayList
@@ -18,12 +21,26 @@ object ModuleManager {
     val worldLoadFunctions = arrayListOf<() -> Unit>()
     val tickTasks = CopyOnWriteArrayList<TickTask>()
 
-    val modules: ArrayList<Module> = arrayListOf(
-        Test
-    )
+    val modules: HashMap<String, Module> = linkedMapOf()
+    val modulesByCategory: HashMap<Category, ArrayList<Module>> = hashMapOf()
 
     init {
-        modules.forEach(Frozen.EVENT_BUS::subscribe)
+        registerModules(ModulesConfig,
+            Test, Testing, Interface, TickTimers, EtherWarp
+        )
+    }
+
+    private fun registerModules(config: ModulesConfig, vararg modules: Module) {
+        modules.forEach { module ->
+            val lowercase = module.name.lowercase()
+            config.modules[lowercase] = module
+            this.modules[lowercase] = module
+            this.modulesByCategory.getOrPut(module.category) { arrayListOf() }.add(module)
+
+//            module.key?.let { keybind ->
+//                val setting =
+//            }
+        }
     }
 
     @EventHandler

@@ -3,20 +3,20 @@ package dev.frozencloud.frozen.util.overlay
 import dev.frozencloud.frozen.Frozen.JSON
 import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.events.impl.HudRenderEvent
+import dev.frozencloud.frozen.util.ui.MouseUtil
 import kotlinx.serialization.Serializable
 import meteordevelopment.orbit.EventHandler
 import java.io.File
-import kotlin.math.max
-import kotlin.math.min
 
 object OverlayManager {
     private val FILE = File(mc.gameDirectory, "config/frozen/overlays.json")
 
-    private val overlays = mutableListOf<Overlay>()
+    val overlays = mutableListOf<Overlay>()
     private val configMap = mutableMapOf<String, Config>()
 
     @EventHandler
     fun onHudRender(event: HudRenderEvent) {
+        if (Overlay.inEditMode) return
         overlays.forEach {
             it.render(event.drawContext, event.renderTickCounter)
         }
@@ -41,7 +41,7 @@ object OverlayManager {
     fun getOverlay(configName: String): Overlay? =
         overlays.find { it.configName == configName }
 
-    fun getHoveredOverlay(mouseX: Double, mouseY: Double): Overlay? {
+    fun getHoveredOverlay(mouseX: Float, mouseY: Float): Overlay? {
         overlays.filter { it.dragging }.let {
             return if (!it.isEmpty()) it[0] else overlays.find { ov -> ov.isMouseOver(mouseX, mouseY) }
         }
@@ -70,10 +70,6 @@ object OverlayManager {
         )
     }
 
-    fun setEditMode(value: Boolean) {
-        overlays.forEach { it.inEditMode = value }
-    }
-
     fun getScaledScreen(): Overlay.Dimensions {
         val width = mc.window.guiScaledWidth
         val height = mc.window.guiScaledHeight
@@ -86,7 +82,6 @@ object OverlayManager {
         var y: Int = 0,
         var scale: Float = 1f,
         var color: Int = 0xFFFFFF,
-        var shadow: Boolean = false,
         var centerX: Boolean = false,
         var centerY: Boolean = false
     )

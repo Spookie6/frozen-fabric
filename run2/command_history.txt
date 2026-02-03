@@ -1,2 +1,18 @@
 /difficulty peaceful
 /frozen
+/bz
+/ah
+/ahs tormentor
+/ah
+/frozen
+/p leave
+/r im not playing
+/r just testing mod stuff
+/frozen
+/effect give dtRico minecraft:strength 10000 255
+/frozen
+/warp hub
+/warp park
+/warp hub
+/warp island
+/frozen

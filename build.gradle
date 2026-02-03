@@ -18,10 +18,21 @@ repositories {
         url = "https://maven.meteordev.org/releases"
     }
     
-    maven { url 'https://repo.hypixel.net/repository/Hypixel/' }
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/"
+  }
+    
     maven { url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
     maven { url 'https://jitpack.io' }
 }
+
+def lwjgl_os_implementations = [
+    "org.lwjgl:lwjgl-nanovg:${project.lwjgl_version}:natives-windows",
+    "org.lwjgl:lwjgl-nanovg:${project.lwjgl_version}:natives-linux",
+    "org.lwjgl:lwjgl-nanovg:${project.lwjgl_version}:natives-macos",
+    "org.lwjgl:lwjgl-nanovg:${project.lwjgl_version}:natives-macos-arm64"
+]
 
 dependencies {
 	// To change the versions see the gradle.properties file
@@ -39,14 +50,19 @@ dependencies {
     // Kotlin serlialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${project.kotlin_serialization_version}")
     
-    // Hypixel mod api
-    implementation "net.hypixel:mod-api:${project.hypixel_mod_api_version}"
-    
     // To run dev end with mc account
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.1")
-
-    // Rendering library - to be removed
-    modImplementation 'com.github.Synnerz:barrl:1.21.10-SNAPSHOT'
+    
+    // Modmenu
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+    
+    // NanoVG
+    modImplementation("org.lwjgl:lwjgl-nanovg:${project.lwjgl_version}")
+    
+    lwjgl_os_implementations.each { dep ->
+        modImplementation dep
+        include dep
+    }
 }
 
 processResources {

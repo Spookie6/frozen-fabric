@@ -1,5 +1,6 @@
 package dev.frozencloud.frozen.util.skyblock
 
+import dev.frozencloud.frozen.util.ui.rendering.NanoVGHelper
 import java.util.*
 
 enum class Island(private val island: String) {
@@ -29,6 +30,8 @@ enum class Island(private val island: String) {
     override fun toString(): String {
         return island
     }
+
+    val textWidth by lazy { NanoVGHelper.textWidth(this.toString(), 16f, NanoVGHelper.defaultFont) }
 
     fun isArea(area: Island): Boolean {
         if (this == SingePlayer) return true
