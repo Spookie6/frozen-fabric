@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
     Held item translation, rotation, scaling
  */
 @Mixin(ItemInHandRenderer.class)
-public abstract class MixinItemRenderer {
+public abstract class MixinItemInhHandRenderer {
 
     @Unique
     private boolean addedStack = false;

@@ -73,7 +73,7 @@ class BooleanSetting(
             6f,
             Colors.TextPrimary.rgba
         )
-        return height
+        return 0f
     }
 
     override fun mouseClicked(mouseButtonEvent: MouseButtonEvent): Boolean {
@@ -85,7 +85,7 @@ class BooleanSetting(
         }
     }
 
-    override val isHovered: Boolean get() = isAreaHovered(lastRight - SLIDER_WIDTH, lastY, SLIDER_WIDTH, SLIDER_HEIGHT, true)
+    override val isHovered: Boolean get() = isAreaHovered(lastRight - SLIDER_WIDTH, lastY + getHeight() / 2 - SLIDER_HEIGHT / 2, SLIDER_WIDTH, SLIDER_HEIGHT, true)
 
     override fun write(gson: Gson): JsonElement = JsonPrimitive(enabled)
 

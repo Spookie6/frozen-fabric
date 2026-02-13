@@ -1,7 +1,9 @@
 package dev.frozencloud.frozen.mixin;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
+import net.minecraft.client.input.MouseButtonInfo;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,4 +25,10 @@ public class MixinMouseHandler {
     public void frozen$onScroll(long l, double d, double e, CallbackInfo ci) {
         if (minecraft.screen == null) ci.cancel();
     }
+
+//    @Inject(method = "onButton", at = @At("HEAD"), cancellable = true)
+//    public void frozen$onButton(long l, MouseButtonInfo mouseButtonInfo, int i, CallbackInfo ci) {
+//        InputConstants.Key key = null;
+//        if (mouseButtonInfo.button() == 0) key = InputConstants.MOUSE_BUTTON_LEFT
+//    }
 }

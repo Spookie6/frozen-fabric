@@ -15,16 +15,16 @@
     "MixinConnection",
     "MixinEffectsInInventory",
     "MixinEntityRenderDispatcher",
-    "MixinItemRenderer",
+    "MixinItemInhHandRenderer",
+    "MixinKeyMapping",
+    "MixinLivingEntity",
     "MixinLocalPlayer",
     "MixinMinecraft",
     "MixinMobEffectInstance",
     "MixinMouseHandler",
     "MixinPerspective",
     "MixinScreen",
-    "MixinScreenEffectRenderer"
-  ],
-  "mixins": [
-    "MixinLivingEntity"
+    "MixinScreenEffectRenderer",
+    "accessors.AccessorClientLevel"
   ]
 }

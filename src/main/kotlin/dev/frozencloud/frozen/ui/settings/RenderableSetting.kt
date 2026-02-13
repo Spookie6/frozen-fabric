@@ -41,8 +41,7 @@ abstract class RenderableSetting<T>(
             16f,
             Colors.TextPrimary.rgba
         )
-
-        return height
+        return 0f
     }
 
     open fun mouseClicked(mouseButtonEvent: MouseButtonEvent): Boolean = false

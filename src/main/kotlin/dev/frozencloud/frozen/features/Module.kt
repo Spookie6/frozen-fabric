@@ -8,7 +8,6 @@ import org.lwjgl.glfw.GLFW
 abstract class Module(
     val name: String,
     @Transient var description: String,
-    val key: Int? = GLFW.GLFW_KEY_UNKNOWN,
     category: Category? = null,
     toggled: Boolean = false
 ) {
@@ -35,7 +34,7 @@ abstract class Module(
 
     operator fun <K : Setting<*>> K.unaryPlus(): K = registerSetting(this)
 
-    fun toggle() {
+    open fun toggle() {
         enabled = !enabled
         if (enabled) onEnable()
         else onDisable()

@@ -6,6 +6,7 @@ import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.ui.settings.RenderableSetting
 import dev.frozencloud.frozen.ui.settings.Saving
 import dev.frozencloud.frozen.features.impl.rendering.Interface
+import dev.frozencloud.frozen.ui.ConfigScreen
 import dev.frozencloud.frozen.util.render.Colors
 import dev.frozencloud.frozen.util.render.Colors.gray38
 import dev.frozencloud.frozen.util.ui.MouseUtil.isAreaHovered
@@ -34,32 +35,35 @@ class KeybindSetting(
             keyNameWidth = NanoVGHelper.textWidth(value.displayName.string, 16f, NanoVGHelper.defaultFont)
         }
 
+    companion object {
+        const val HEIGHT = 20f
+        const val RECT_PADDING = 6f
+    }
+
     override fun render(x: Float, y: Float, right: Float, mouseX: Float, mouseY: Float): Float {
         super.render(x, y, right, mouseX, mouseY)
         if (keyNameWidth < 0) keyNameWidth = NanoVGHelper.textWidth(value.displayName.string, 16f, NanoVGHelper.defaultFont)
         val height = getHeight()
 
-        val rectX = x + width - 20 - keyNameWidth
-        val rectY = y + height / 2f - 10f
-        val rectWidth = keyNameWidth + 12f
-        val rectHeight = 20f
+        val rectX = right - keyNameWidth - RECT_PADDING * 2f
+        val rectY = y + height / 2f - HEIGHT / 2f
+        val rectWidth = keyNameWidth + RECT_PADDING * 2f
 
-        NanoVGHelper.roundedRect(rectX, rectY, rectWidth, rectHeight, 5f, gray38.rgba)
-        NanoVGHelper.hollowRect(rectX - 1, rectY - 1, rectWidth + 2f, rectHeight + 2f, 1.5f, Colors.GlacialAccent.rgba, 4f)
+        NanoVGHelper.hollowRect(rectX, rectY, rectWidth, HEIGHT, 1.5f, Colors.Border.rgba, 4f)
+        NanoVGHelper.text(NanoVGHelper.defaultFont, value.displayName.string, rectX + RECT_PADDING, rectY + HEIGHT / 2f - 8f, 16f, if (listening) Colors.GlacialAccent.rgba else Colors.TextPrimary.rgba)
 
-        NanoVGHelper.text(NanoVGHelper.defaultFont, name, x + 6f, y + height / 2f - 8f, 16f, Colors.WHITE.rgba)
-        NanoVGHelper.text(NanoVGHelper.defaultFont, value.displayName.string, rectX + (rectWidth - keyNameWidth) / 2, rectY + rectHeight / 2 - 8f, 16f, if (listening) Colors.MINECRAFT_YELLOW.rgba else Colors.WHITE.rgba)
-
-        return height
+        return 0f
     }
 
     override fun mouseClicked(mouseButtonEvent: MouseButtonEvent): Boolean {
         if (listening) {
             key = InputConstants.Type.MOUSE.getOrCreate(mouseButtonEvent.button())
             listening = false
+            ConfigScreen.preventClosing = false
             return true
         } else if (mouseButtonEvent.button() == 0 && isHovered) {
             listening = true
+            ConfigScreen.preventClosing = true
             return true
         }
         return false
@@ -75,6 +79,7 @@ class KeybindSetting(
         }
 
         listening = false
+        ConfigScreen.preventClosing = false
         return true
     }
 
@@ -88,7 +93,7 @@ class KeybindSetting(
 
     override val isHovered: Boolean
         get() =
-            isAreaHovered(lastX + width - 20 - keyNameWidth, lastY + getHeight() / 2f - 10f, keyNameWidth + 12f, 22f, true)
+            isAreaHovered(lastRight - keyNameWidth - RECT_PADDING * 2, lastY + getHeight() / 2f - HEIGHT / 2, keyNameWidth + RECT_PADDING * 2, HEIGHT, true)
 
     override fun write(gson: Gson): JsonElement = JsonPrimitive(value.name)
 

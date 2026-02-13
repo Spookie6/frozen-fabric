@@ -1,6 +1,7 @@
 package dev.frozencloud.frozen
 
 import dev.frozencloud.frozen.commands.impl.MainCommand
+import dev.frozencloud.frozen.compat.IrisCompatibility
 import dev.frozencloud.frozen.config.KeyShortcutConfig
 import dev.frozencloud.frozen.config.ModulesConfig
 import dev.frozencloud.frozen.config.SlotbindingConfig
@@ -10,10 +11,13 @@ import dev.frozencloud.frozen.events.impl.HudRenderEvent
 import dev.frozencloud.frozen.events.impl.TickEvent
 import dev.frozencloud.frozen.features.ModuleManager
 import dev.frozencloud.frozen.util.ChatUtil
+import dev.frozencloud.frozen.util.Scheduler
 import dev.frozencloud.frozen.util.overlay.OverlayManager
 import dev.frozencloud.frozen.util.render.RenderBatchManager
 import dev.frozencloud.frozen.util.skyblock.LocationUtil
+import dev.frozencloud.frozen.util.skyblock.kuudra.KuudraUtil
 import dev.frozencloud.frozen.util.ui.rendering.NanoVGSpecials
+import dev.frozencloud.frozen.util.yaw
 import kotlinx.serialization.json.Json
 import meteordevelopment.orbit.EventBus
 import meteordevelopment.orbit.EventHandler
@@ -23,6 +27,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.rendering.v1.SpecialGuiElementRegistry
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.resources.ResourceLocation
@@ -48,6 +53,10 @@ object Frozen : ClientModInitializer {
     var screenToOpen: Screen? = null
 
     @JvmStatic
+    var modVersion: String = ""
+        private set
+
+    @JvmStatic
     val JSON = Json {
         prettyPrint = true
         encodeDefaults = true
@@ -60,13 +69,14 @@ object Frozen : ClientModInitializer {
     override fun onInitializeClient() {
         logger.info("Initializing Frozen...")
 
+        modVersion = FabricLoader.getInstance().getModContainer(MOD_ID).map { it.metadata.version.friendlyString }.orElse("")
+
         EVENT_BUS.registerLambdaFactory("dev.frozencloud.frozen") { lookupInMethod, klass ->
             lookupInMethod.invoke(null, klass, MethodHandles.lookup()) as MethodHandles.Lookup
         }
 
         OverlayManager.loadConfigs()
 
-        ModulesConfig.load()
         KeyShortcutConfig.load()
         SlotbindingConfig.load()
         WaypointConfig.load()
@@ -80,6 +90,10 @@ object Frozen : ClientModInitializer {
         SpecialGuiElementRegistry.register { context ->
             NanoVGSpecials(context.vertexConsumers())
         }
+
+        if (FabricLoader.getInstance().isModLoaded("iris")) {
+            IrisCompatibility.init()
+        }
     }
 
     fun registerModules() {
@@ -90,7 +104,9 @@ object Frozen : ClientModInitializer {
             OverlayManager,
             ModuleManager,
             EventDispatcher,
-            RenderBatchManager
+            RenderBatchManager,
+            Scheduler,
+            KuudraUtil
         )
         modules.forEach(EVENT_BUS::subscribe)
     }

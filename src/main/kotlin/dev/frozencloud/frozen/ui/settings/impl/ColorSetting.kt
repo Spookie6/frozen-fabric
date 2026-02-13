@@ -74,16 +74,19 @@ class ColorSetting(
 
     override fun render(x: Float, y: Float, right: Float, mouseX: Float, mouseY: Float): Float {
         super.render(x, y, right, mouseX, mouseY)
+        val height = getHeight()
+
         if (hexWidth < 0) {
             hexString = value.hex(allowAlpha)
             hexWidth = NanoVGHelper.textWidth(hexString, 16f, NanoVGHelper.defaultFont)
         }
 
-        NanoVGHelper.text(NanoVGHelper.defaultFont, name, x + 6f, y + defaultHeight / 2f - 8f, 16f, Colors.WHITE.rgba)
-        NanoVGHelper.roundedRect(x + width - 40f, y + defaultHeight / 2f - 10f, 34f, 20f,5f, value.rgba)
-        NanoVGHelper.hollowRect(x + width - 40f, y + defaultHeight / 2f - 10f, 34f, 20f, 2f, value.withAlpha(1f).darker().rgba, 5f)
+        NanoVGHelper.roundedRect(right - 200f, y + height / 2f - 10f, 20f, 20f,2f, value.rgba)
+        NanoVGHelper.hollowRect(right - 200f, y + height / 2f - 10f, 20f, 20f, 2f, value.withAlpha(1f).darker().rgba, 2f)
 
-        if (!extended && !expandAnim.isAnimating()) return defaultHeight
+        if (!extended && !expandAnim.isAnimating()) return 200f
+
+        val expandedHeight = expandAnim.get(defaultHeight, defaultHeight + if (allowAlpha) 250f else 230f, !extended)
 
         if (expandAnim.isAnimating()) NanoVGHelper.scissor(x, y + defaultHeight, width, getHeight() - defaultHeight)
         // SATURATION AND BRIGHTNESS
@@ -120,10 +123,7 @@ class ColorSetting(
 
         if (section != null) hexString = value.hex(allowAlpha)
 
-        // main width - text input
-        val sidePadding = (width - width / 2) / 2f
-
-        val rectX = x + sidePadding
+        val rectX = x
         val actualHeight = defaultHeight + if (allowAlpha) 250f else 230f
 
         NanoVGHelper.roundedRect(rectX, y + actualHeight - 28f, width / 2, 24f,4f,  gray38.rgba)
@@ -135,7 +135,7 @@ class ColorSetting(
         textInputHandler.draw(mouseX, mouseY)
 
         if (expandAnim.isAnimating()) NanoVGHelper.resetScissor()
-        return getHeight()
+        return expandedHeight - super.getHeight()
     }
 
     override fun mouseClicked(mouseButtonEvent: MouseButtonEvent): Boolean {
@@ -156,7 +156,6 @@ class ColorSetting(
         }
 
         return section != null
-
     }
 
 
@@ -174,9 +173,6 @@ class ColorSetting(
         return if (extended) textInputHandler.keyTyped(input)
         else false
     }
-
-    override fun getHeight(): Float =
-        expandAnim.get(defaultHeight, defaultHeight + if (allowAlpha) 250f else 230f, !extended)
 
     override val isHovered: Boolean
         get() = isAreaHovered(

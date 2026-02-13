@@ -8,17 +8,17 @@ import net.minecraft.client.gui.GuiGraphics
 class DynamicOverlay(
     configName: String,
     setting: BooleanSetting,
-    renderCondition: () -> Boolean,
     islands: List<Island>,
-    val renderFunc: (context: GuiGraphics, example: Boolean) -> Dimensions
+    renderCondition: () -> Boolean = { true },
+    val renderFunc: (context: GuiGraphics, example: Boolean, ov: Overlay) -> Dimensions
 ) : Overlay(configName, setting, renderCondition, islands) {
 
     override fun render(context: GuiGraphics, renderTickCounter: DeltaTracker) {
-        dimensions = renderFunc(context, inEditMode)
+        dimensions = renderFunc(context, inEditMode, this)
     }
 
     @Suppress
     override fun calculateDimensions(): Dimensions {
-        TODO("Not yet implemented")
+        TODO("Dimensions calculated within the render function")
     }
 }

@@ -1,6 +1,5 @@
 plugins {
 	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
-	id 'maven-publish'
 	id "org.jetbrains.kotlin.jvm" version "2.3.0"
 	id "org.jetbrains.kotlin.plugin.serialization" version "2.3.0"
 }
@@ -13,6 +12,8 @@ base {
 }
 
 repositories {
+    maven { url 'https://jitpack.io' }
+    
     maven {
         name = "meteor-maven"
         url = "https://maven.meteordev.org/releases"
@@ -24,7 +25,7 @@ repositories {
   }
     
     maven { url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
-    maven { url 'https://jitpack.io' }
+    maven { url = "https://api.modrinth.com/maven" }
 }
 
 def lwjgl_os_implementations = [
@@ -63,6 +64,9 @@ dependencies {
         modImplementation dep
         include dep
     }
+
+    // Iris
+    compileOnly("maven.modrinth:iris:${project.iris_version}")
 }
 
 processResources {
@@ -95,14 +99,5 @@ jar {
 
 	from("LICENSE") {
 		rename { "${it}_${inputs.properties.archivesName}"}
-	}
-}
-
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			from components.java
-		}
 	}
 }

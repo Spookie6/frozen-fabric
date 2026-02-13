@@ -1,7 +1,6 @@
 package dev.frozencloud.frozen.util.skyblock
 
 import dev.frozencloud.frozen.util.ui.rendering.NanoVGHelper
-import java.util.*
 
 enum class Island(private val island: String) {
     SingePlayer("Singleplayer"),
@@ -40,8 +39,7 @@ enum class Island(private val island: String) {
 
     companion object {
         fun findMatch(match: String): Island {
-            return Arrays.stream<Island?>(entries.toTypedArray()).filter { x: Island? -> match.contains(x.toString()) }
-                .findFirst().orElse(Island.Unknown)!!
+            return entries.firstOrNull { match.contains(it.island) } ?: Island.Unknown
         }
     }
 }

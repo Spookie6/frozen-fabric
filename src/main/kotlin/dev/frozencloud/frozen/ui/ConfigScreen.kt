@@ -30,6 +30,8 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
     const val MODULE_DROPDOWN_LEFT_X = 420f
     const val MODULE_DROPDOWN_RIGHT_X = 520f + ModuleDropdownComponent.WIDTH
 
+    var preventClosing = false
+
     private var descr: Description? = null
     fun setDescription(content: String, x: Float, y: Float, hoverHandler: HoverHandler) {
         if (descr != null) return
@@ -97,11 +99,13 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
 
     override fun mouseReleased(mouseButtonEvent: MouseButtonEvent): Boolean {
         SearchBarComponent.onMouseReleased()
+        moduleDropdownsByCategory[currentCategory]?.forEach { it.onMouseReleased(mouseButtonEvent) }
         return super.mouseReleased(mouseButtonEvent)
     }
 
     override fun keyPressed(keyEvent: KeyEvent): Boolean {
         SearchBarComponent.onKeyPressed(keyEvent)
+        moduleDropdownsByCategory[currentCategory]?.forEach { it.onKeyPressed(keyEvent) }
         return super.keyPressed(keyEvent)
     }
 
@@ -116,6 +120,8 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
     }
 
     override fun isPauseScreen(): Boolean = false
+
+    override fun shouldCloseOnEsc(): Boolean = !preventClosing
 
     val hueImage = NanoVGHelper.createImage("/assets/${Frozen.MOD_ID}/HueGradient.png")
     

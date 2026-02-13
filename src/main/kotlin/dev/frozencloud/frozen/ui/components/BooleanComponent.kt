@@ -28,7 +28,7 @@ class BooleanComponent(val text: String,  var value: Boolean) {
         lastX = x
         lastY = y
 
-        NanoVGHelper.roundedRectBorder(x, y, WIDTH, HEIGHT, 50f, 2f, Colors.gray38.rgba, Colors.WHITE.darker().rgba)
+        NanoVGHelper.roundedRectBorder(x, y, WIDTH, HEIGHT, 50f, 2f, Colors.gray38.rgba, Colors.Border.rgba)
 
         val knobX = when {
             animation.isAnimating() -> animation.get(x + 4 + KNOB_RADIUS, x + WIDTH - 4 - KNOB_RADIUS, !value)
