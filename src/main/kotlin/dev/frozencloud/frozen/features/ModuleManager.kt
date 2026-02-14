@@ -41,7 +41,7 @@ object ModuleManager {
         )
     }
 
-    private fun registerModules(config: ModulesConfig, vararg modules: Module) {
+    fun registerModules(config: ModulesConfig, vararg modules: Module) {
         modules.forEach { module ->
             val lowercase = module.name.lowercase()
             config.modules[lowercase] = module
