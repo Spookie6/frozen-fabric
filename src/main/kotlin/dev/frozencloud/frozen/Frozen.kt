@@ -33,6 +33,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.resources.ResourceLocation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
 import java.lang.invoke.MethodHandles
 import java.util.*
 
@@ -50,11 +51,16 @@ object Frozen : ClientModInitializer {
     val EVENT_BUS: IEventBus = EventBus()
 
     @JvmStatic
-    var screenToOpen: Screen? = null
+    val configFile = File(mc.gameDirectory, "config/frozen/").apply {
+        if (!exists()) mkdirs()
+    }
+
+    @Suppress("unused")
+    @JvmStatic
+    val modVersion: String = FabricLoader.getInstance().getModContainer(MOD_ID).map { it.metadata.version.friendlyString }.orElse("")
 
     @JvmStatic
-    var modVersion: String = ""
-        private set
+    var screenToOpen: Screen? = null
 
     @JvmStatic
     val JSON = Json {
@@ -68,8 +74,6 @@ object Frozen : ClientModInitializer {
 
     override fun onInitializeClient() {
         logger.info("Initializing Frozen...")
-
-        modVersion = FabricLoader.getInstance().getModContainer(MOD_ID).map { it.metadata.version.friendlyString }.orElse("")
 
         EVENT_BUS.registerLambdaFactory("dev.frozencloud.frozen") { lookupInMethod, klass ->
             lookupInMethod.invoke(null, klass, MethodHandles.lookup()) as MethodHandles.Lookup

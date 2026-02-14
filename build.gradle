@@ -2,6 +2,7 @@ plugins {
 	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 	id "org.jetbrains.kotlin.jvm" version "2.3.0"
 	id "org.jetbrains.kotlin.plugin.serialization" version "2.3.0"
+	id "maven-publish"
 }
 
 version = project.mod_version
@@ -89,6 +90,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 
 java {
 	withSourcesJar()
+	withJavadocJar()
 
 	sourceCompatibility = JavaVersion.VERSION_21
 	targetCompatibility = JavaVersion.VERSION_21
@@ -100,4 +102,15 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${inputs.properties.archivesName}"}
 	}
+}
+
+publishing {
+    publications {
+        mave(MavenPublication) {
+            groupId = "com.github.spookie6"
+            artifactId = "Frozen"
+            version = version
+            from components.java
+        }
+    }
 }

@@ -1,19 +1,20 @@
 package dev.frozencloud.frozen.config
 
 import com.google.gson.*
+import dev.frozencloud.frozen.Frozen
 import dev.frozencloud.frozen.Frozen.logger
 import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.ui.settings.Saving
 import dev.frozencloud.frozen.features.Module
 import java.io.File
 
-object ModulesConfig {
+class ModulesConfig internal constructor(file: File) {
+    constructor(fileName: String) : this(File(Frozen.configFile, "addons/$fileName"))
 
-    val FILE = File(mc.gameDirectory, "config/frozen/config.json")
     // key is module name in lowercase
     internal val modules: HashMap<String, Module> = hashMapOf()
 
-    private val file: File = FILE.apply {
+    private val file: File = file.apply {
         try {
             parentFile.mkdirs()
             createNewFile()

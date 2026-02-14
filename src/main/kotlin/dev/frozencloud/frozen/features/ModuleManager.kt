@@ -15,6 +15,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectArraySet
 import meteordevelopment.orbit.EventHandler
 import net.minecraft.network.protocol.Packet
+import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
 
 object ModuleManager {
@@ -35,7 +36,7 @@ object ModuleManager {
     val keySettingsCache = ObjectArrayList<KeybindSetting>()
 
     init {
-        registerModules(ModulesConfig,
+        registerModules(ModulesConfig(file = File(Frozen.configFile, "config.json")),
             Test, Testing, Interface, TickTimers, EtherWarp, Wardrobe
         )
     }
@@ -52,6 +53,14 @@ object ModuleManager {
 
         configs.add(config)
         config.load()
+    }
+
+    fun loadConfigurations() {
+        for (config in configs) config.load()
+    }
+
+    fun saveConfigurations() {
+        for (config in configs) config.save()
     }
 
     @EventHandler
