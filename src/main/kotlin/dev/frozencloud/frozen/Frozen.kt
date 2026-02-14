@@ -3,34 +3,27 @@ package dev.frozencloud.frozen
 import dev.frozencloud.frozen.commands.impl.MainCommand
 import dev.frozencloud.frozen.compat.IrisCompatibility
 import dev.frozencloud.frozen.config.KeyShortcutConfig
-import dev.frozencloud.frozen.config.ModulesConfig
 import dev.frozencloud.frozen.config.SlotbindingConfig
 import dev.frozencloud.frozen.config.WaypointConfig
 import dev.frozencloud.frozen.events.EventDispatcher
-import dev.frozencloud.frozen.events.impl.HudRenderEvent
 import dev.frozencloud.frozen.events.impl.TickEvent
 import dev.frozencloud.frozen.features.ModuleManager
-import dev.frozencloud.frozen.util.ChatUtil
 import dev.frozencloud.frozen.util.Scheduler
 import dev.frozencloud.frozen.util.overlay.OverlayManager
 import dev.frozencloud.frozen.util.render.RenderBatchManager
 import dev.frozencloud.frozen.util.skyblock.LocationUtil
 import dev.frozencloud.frozen.util.skyblock.kuudra.KuudraUtil
 import dev.frozencloud.frozen.util.ui.rendering.NanoVGSpecials
-import dev.frozencloud.frozen.util.yaw
 import kotlinx.serialization.json.Json
 import meteordevelopment.orbit.EventBus
 import meteordevelopment.orbit.EventHandler
 import meteordevelopment.orbit.IEventBus
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.rendering.v1.SpecialGuiElementRegistry
-import net.fabricmc.fabric.api.resource.v1.ResourceLoader
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.resources.ResourceLocation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -52,7 +45,12 @@ object Frozen : ClientModInitializer {
 
     @JvmStatic
     val configFile = File(mc.gameDirectory, "config/frozen/").apply {
-        if (!exists()) mkdirs()
+        try {
+            if (!exists()) mkdirs()
+        } catch (e: Exception) {
+            println("Error initializing module config\n${e.message}")
+            logger.error("Error initializing module config", e)
+        }
     }
 
     @Suppress("unused")
@@ -116,7 +114,7 @@ object Frozen : ClientModInitializer {
     }
 
     @EventHandler
-    public fun onClientTick(event: TickEvent.Client) {
+    fun onClientTick(event: TickEvent.Client) {
         if (event.phase == TickEvent.PHASE.START) return
         if (mc.level == null) return
 

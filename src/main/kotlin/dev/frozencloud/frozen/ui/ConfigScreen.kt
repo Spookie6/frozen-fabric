@@ -115,7 +115,7 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
     }
 
     override fun onClose() {
-        ModulesConfig.save()
+        ModuleManager.saveConfigurations()
         super.onClose()
     }
 
