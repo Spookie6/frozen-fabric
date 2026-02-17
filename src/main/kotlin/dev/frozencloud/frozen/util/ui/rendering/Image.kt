@@ -22,9 +22,10 @@ class Image(
 
     fun buffer(): ByteBuffer {
         if (buffer == null) {
-            val bytes = stream.readBytes()
-            buffer = MemoryUtil.memAlloc(bytes.size).put(bytes).flip() as ByteBuffer
-            stream.close()
+            val bytes = stream.use { it.readBytes() } // .use ensures stream closes
+            val nativeBuffer = MemoryUtil.memAlloc(bytes.size)
+            nativeBuffer.put(bytes).flip()
+            buffer = nativeBuffer
         }
         return buffer ?: throw IllegalStateException("Image has no data")
     }
@@ -40,6 +41,7 @@ class Image(
     }
 
     companion object {
+
         private fun getStream(path: String): InputStream {
             val trimmedPath = path.trim()
             return if (trimmedPath.startsWith("http")) runBlocking { getInputStream(trimmedPath).getOrThrow() }

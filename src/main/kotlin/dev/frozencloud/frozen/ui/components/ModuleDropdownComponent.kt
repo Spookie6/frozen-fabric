@@ -2,6 +2,7 @@ package dev.frozencloud.frozen.ui.components
 
 import dev.frozencloud.frozen.features.Module
 import dev.frozencloud.frozen.ui.settings.RenderableSetting
+import dev.frozencloud.frozen.ui.settings.impl.ColorSetting
 import dev.frozencloud.frozen.ui.settings.impl.KeybindSetting
 import dev.frozencloud.frozen.util.render.Colors
 import dev.frozencloud.frozen.util.ui.MouseUtil
@@ -9,6 +10,7 @@ import dev.frozencloud.frozen.util.ui.MouseUtil.isAreaHovered
 import dev.frozencloud.frozen.util.ui.animations.ColorAnimation
 import dev.frozencloud.frozen.util.ui.animations.EaseOutAnimation
 import dev.frozencloud.frozen.util.ui.rendering.NanoVGHelper
+import net.minecraft.client.input.CharacterEvent
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import kotlin.math.exp
@@ -86,6 +88,9 @@ class ModuleDropdownComponent(val module: Module) {
         if (isHovered && mouseButtonEvent.button() == 1) {
             if (module.settings.isEmpty()) return
             expanded = !expanded
+            if (!expanded) {
+                module.settings.filter { it.value is ColorSetting }.forEach { (it.value as ColorSetting).close() }
+            }
             anim.start()
         }
 
@@ -101,6 +106,11 @@ class ModuleDropdownComponent(val module: Module) {
     fun onKeyPressed(keyEvent: KeyEvent) {
         if (expanded)
             renderableSettings.forEach { it.keyPressed(keyEvent) }
+    }
+
+    fun onCharTyped(characterEvent: CharacterEvent) {
+        if (expanded)
+            renderableSettings.forEach { it.keyTyped(characterEvent) }
     }
 
     val isHovered: Boolean get() = isAreaHovered(lastX, lastY, WIDTH, HEIGHT, true)

@@ -38,7 +38,8 @@ class TextInputHandler(
 
     private var caretBlinkTime = System.currentTimeMillis()
     private var lastClickTime = 0L
-    private var listening = false
+    var listening = false
+        private set
     private var dragging = false
     private var clickCount = 1
 
@@ -82,9 +83,9 @@ class TextInputHandler(
                 caretBlinkTime = System.currentTimeMillis()
         }
 
-        NanoVGHelper.scissor(x, y, width, height)
+//        NanoVGHelper.scissor(x, y, width, height)
         NanoVGHelper.text(NanoVGHelper.defaultFont, text, x, y + 2f, height - 2, Colors.TextPrimary.rgba)
-        NanoVGHelper.resetScissor()
+//        NanoVGHelper.resetScissor()
     }
 
     fun onMouseClicked(mouseButtonEvent: MouseButtonEvent): Boolean {

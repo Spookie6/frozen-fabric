@@ -1,6 +1,6 @@
 package dev.frozencloud.frozen.ui.components
 
-import dev.frozencloud.frozen.Frozen
+import dev.frozencloud.frozen.ui.ConfigScreen
 import dev.frozencloud.frozen.util.next
 import dev.frozencloud.frozen.util.render.Color.Companion.darker
 import dev.frozencloud.frozen.util.render.Colors
@@ -17,8 +17,6 @@ class IslandsDropdownComponent(var current: Island) {
     var opened = false
     val animation = LinearAnimation<Float>(350)
 
-    val image = NanoVGHelper.createImage("/assets/${Frozen.MOD_ID}/textures/gui/dropdown_arrow.svg")
-
     companion object {
         const val WIDTH = 172f
         const val HEIGHT = 32f
@@ -30,9 +28,7 @@ class IslandsDropdownComponent(var current: Island) {
 
         NanoVGHelper.roundedRect(x, y, WIDTH, HEIGHT,6f, if (isHovered) Colors.MINECRAFT_AQUA.darker().rgba else Colors.MINECRAFT_AQUA.rgba)
         NanoVGHelper.text(NanoVGHelper.defaultFont, current.toString(), x + 24f, y + HEIGHT / 2f - 8f, 16f, Colors.gray21.rgba)
-//        NanoVGHelper.image(image, x + 2f, y + 2, 16f, 16f)
-        NanoVGHelper.arrow(x + 12, y + 12, 8f, 8f, 2f, Colors.gray21.rgba)
-        NanoVGHelper.line(x + 20, y, x + 20, y + HEIGHT, 1f, Colors.gray21.rgba)
+        NanoVGHelper.image(ConfigScreen.chevronImage, x + 2f, y + 2, 16f, 16f)
     }
 
     fun onMouseClicked(event: MouseButtonEvent) {

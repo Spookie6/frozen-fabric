@@ -8,6 +8,7 @@ import dev.frozencloud.frozen.ui.settings.Saving
 import dev.frozencloud.frozen.features.Module
 import java.io.File
 
+@Suppress("unused")
 class ModulesConfig internal constructor(file: File) {
     constructor(fileName: String) : this(File(Frozen.configFile, "addons/$fileName"))
 

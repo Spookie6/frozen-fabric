@@ -111,6 +111,7 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
 
     override fun charTyped(characterEvent: CharacterEvent): Boolean {
         SearchBarComponent.onKeyTyped(characterEvent)
+        moduleDropdownsByCategory[currentCategory]?.forEach { it.onCharTyped(characterEvent) }
         return super.charTyped(characterEvent)
     }
 
@@ -124,7 +125,9 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
     override fun shouldCloseOnEsc(): Boolean = !preventClosing
 
     val hueImage = NanoVGHelper.createImage("/assets/${Frozen.MOD_ID}/HueGradient.png")
-    
+    val chevronImage = NanoVGHelper.createImage("/assets/${Frozen.MOD_ID}/chevron.svg")
+    val moveImage = NanoVGHelper.createImage("/assets/${Frozen.MOD_ID}/move.svg")
+
     data class Description(val content: String, val x: Float, val y: Float, val w: Float, val hoverHandler: HoverHandler) {
         val size = 16f
     }

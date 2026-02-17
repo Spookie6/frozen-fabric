@@ -4,9 +4,6 @@ import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.util.ui.rendering.NanoVGHelper
 import kotlin.math.max
 
-val String.noControlCodes: String
-    get() = replace("§.".toRegex(), "")
-
 fun getStandardGuiScale(): Float {
     val verticalScale = (mc.window.height.toFloat() / 1080f) / NanoVGHelper.devicePixelRatio()
     val horizontalScale = (mc.window.width.toFloat() / 1920f) / NanoVGHelper.devicePixelRatio()

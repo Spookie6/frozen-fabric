@@ -11,6 +11,7 @@ import org.lwjgl.nanovg.NVGPaint
 import org.lwjgl.nanovg.NanoSVG.*
 import org.lwjgl.nanovg.NanoVG.*
 import org.lwjgl.nanovg.NanoVGGL3.*
+import org.lwjgl.stb.STBImage.stbi_image_free
 import org.lwjgl.stb.STBImage.stbi_load_from_memory
 import org.lwjgl.system.MemoryUtil.memAlloc
 import org.lwjgl.system.MemoryUtil.memFree
@@ -258,9 +259,17 @@ object NanoVGHelper {
 
     fun createImage(resourcePath: String): Image {
         val image = images.keys.find { it.identifier == resourcePath } ?: Image(resourcePath)
-        if (image.isSVG) images.getOrPut(image) { VGImage(0, loadSVG(image)) }.refs++
-        else images.getOrPut(image) { VGImage(0, loadImage(image)) }.refs++
+
+        val vgImage = images.getOrPut(image) {
+            val id = loadImage(image)
+            VGImage(id, 0)
+        }
+        vgImage.refs++
         return image
+    }
+
+    private fun getImage(image: Image): Int {
+        return images[image]?.id ?: throw IllegalStateException("Image (${image.identifier}) doesn't exist")
     }
 
     private fun loadImage(image: Image): Int =
@@ -274,7 +283,11 @@ object NanoVGHelper {
         val buffer = stbi_load_from_memory(image.buffer(), w, h, c, 4)
             ?: error("Failed to load image: ${image.identifier}")
 
-        return nvgCreateImageRGBA(vg, w[0], h[0], 0, buffer)
+        val id = nvgCreateImageRGBA(vg, w[0], h[0], 0, buffer)
+
+        stbi_image_free(buffer)
+
+        return id
     }
 
     private fun loadSVG(image: Image): Int {
@@ -296,13 +309,38 @@ object NanoVGHelper {
         }
     }
 
-    fun image(image: Image, x: Float, y: Float, w: Float, h: Float, r: Float = 0f) {
-        val id = images[image]?.id ?: error("Image not acquired: ${image.identifier}")
+    fun image(image: Int, textureWidth: Int, textureHeight: Int, subX: Int, subY: Int, subW: Int, subH: Int, x: Float, y: Float, w: Float, h: Float, radius: Float) {
+        if (image == -1) return
 
-        nvgImagePattern(vg, x, y, w, h, 0f, id, 1f, paint)
+        val sx = subX.toFloat() / textureWidth
+        val sy = subY.toFloat() / textureHeight
+        val sw = subW.toFloat() / textureWidth
+        val sh = subH.toFloat() / textureHeight
+
+        val iw = w / sw
+        val ih = h / sh
+        val ix = x - iw * sx
+        val iy = y - ih * sy
+
+        nvgImagePattern(vg, ix, iy, iw, ih, 0f, image, 1f, paint)
         nvgBeginPath(vg)
-        if (r > 0f) nvgRoundedRect(vg, x, y, w, h, r)
-        else nvgRect(vg, x, y, w, h)
+        nvgRoundedRect(vg, x, y, w, h + .5f, radius)
+        nvgFillPaint(vg, paint)
+        nvgFill(vg)
+    }
+
+    fun image(image: Image, x: Float, y: Float, w: Float, h: Float, radius: Float) {
+        nvgImagePattern(vg, x, y, w, h, 0f, getImage(image), 1f, paint)
+        nvgBeginPath(vg)
+        nvgRoundedRect(vg, x, y, w, h + .5f, radius)
+        nvgFillPaint(vg, paint)
+        nvgFill(vg)
+    }
+
+    fun image(image: Image, x: Float, y: Float, w: Float, h: Float) {
+        nvgImagePattern(vg, x, y, w, h, 0f, getImage(image), 1f, paint)
+        nvgBeginPath(vg)
+        nvgRect(vg, x, y, w, h + .5f)
         nvgFillPaint(vg, paint)
         nvgFill(vg)
     }
