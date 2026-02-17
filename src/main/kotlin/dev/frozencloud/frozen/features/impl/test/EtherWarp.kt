@@ -7,8 +7,11 @@ import dev.frozencloud.frozen.ui.settings.impl.BooleanSetting
 import dev.frozencloud.frozen.ui.settings.impl.ColorSetting
 import dev.frozencloud.frozen.ui.settings.impl.KeybindSetting
 import dev.frozencloud.frozen.ui.settings.impl.NumberSetting
+import dev.frozencloud.frozen.ui.settings.impl.OverlaySetting
 import dev.frozencloud.frozen.util.ChatUtil
+import dev.frozencloud.frozen.util.overlay.TextOverlay
 import dev.frozencloud.frozen.util.render.Color
+import dev.frozencloud.frozen.util.skyblock.Island
 import org.lwjgl.glfw.GLFW
 
 object EtherWarp : Module(
@@ -26,5 +29,14 @@ object EtherWarp : Module(
         ChatUtil.sendModInfo("Action setting executed!")
     }
     val colorSetting by ColorSetting("Color thing", Color(255, 0, 0, 255f), false, "Color option description thingy")
+    val overlaySetting by OverlaySetting(
+        "Overlay thing", TextOverlay(
+            configName = "Test",
+            renderCondition = { true },
+            islands = listOf(Island.Unknown),
+            textSupplier = { "Hello there" },
+            exampleText = "Hallo daar"
+    ), "Overlay option description thingy")
+
 //    val dropDownSetting by DropdownSetting("Dropdown thing", "Outlined", ["Outlined", "Filled", "Filled outline"])
 }

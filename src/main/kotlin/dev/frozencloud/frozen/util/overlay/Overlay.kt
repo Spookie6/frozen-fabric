@@ -12,7 +12,11 @@ import org.lwjgl.glfw.GLFW
 import kotlin.math.max
 import kotlin.math.min
 
-abstract class Overlay(var configName: String, val setting: BooleanSetting, val renderCondition: () -> Boolean, val islands: List<Island>) {
+abstract class Overlay(
+    var configName: String,
+    val renderCondition: () -> Boolean,
+    val islands: List<Island>
+) {
     val config: OverlayManager.Config = OverlayManager.Config()
     var dimensions: Dimensions = Dimensions(0, 0)
 
@@ -36,7 +40,7 @@ abstract class Overlay(var configName: String, val setting: BooleanSetting, val 
     abstract fun calculateDimensions(): Dimensions
 
     inline val shouldRender: Boolean
-        get() = (setting.value && renderCondition() && islands.contains(LocationUtil.currentIsland)) || inEditMode
+        get() = (config.enabled && renderCondition() && islands.contains(LocationUtil.currentIsland)) || inEditMode
 
     inline val scaledWidth: Int
         get() = (dimensions.width * config.scale).toInt()

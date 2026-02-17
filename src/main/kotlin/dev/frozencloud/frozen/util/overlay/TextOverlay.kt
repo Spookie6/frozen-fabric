@@ -2,7 +2,6 @@ package dev.frozencloud.frozen.util.overlay
 
 import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.features.impl.rendering.Interface
-import dev.frozencloud.frozen.ui.settings.impl.BooleanSetting
 import dev.frozencloud.frozen.util.render.Color
 import dev.frozencloud.frozen.util.skyblock.Island
 import net.minecraft.client.DeltaTracker
@@ -10,12 +9,11 @@ import net.minecraft.client.gui.GuiGraphics
 
 class TextOverlay(
     configName: String,
-    setting: BooleanSetting,
     renderCondition: () -> Boolean,
     islands: List<Island>,
     val textSupplier: () -> String,
     val exampleText: String
-) : Overlay(configName, setting, renderCondition, islands) {
+) : Overlay(configName, renderCondition, islands) {
     inline val text: String
         get() = runCatching {
             if (inEditMode) exampleText else textSupplier()

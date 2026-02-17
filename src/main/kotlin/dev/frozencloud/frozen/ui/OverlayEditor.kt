@@ -55,31 +55,16 @@ object OverlayEditor : Screen(Component.literal("Frozen overlay editor")) {
 
             context.drawString(mc.font, "(${config.x}, ${config.y})", config.x, config.y - mc.font.lineHeight - 1, Colors.TextSecondary.rgba, true)
         }
-
-        OverlayConfigEditor.render(context)
     }
 
     override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
-        if (OverlayConfigEditor.opened) {
-            if (!OverlayConfigEditor.isHovered) OverlayConfigEditor.close()
-            else OverlayConfigEditor.onMouseClicked(mouseButtonEvent)
-        } else {
-            if (mouseButtonEvent.button() == 0) {
-                OverlayManager.getHoveredOverlay(mouseButtonEvent.x.toFloat(), mouseButtonEvent.y.toFloat())?.startDragging(mouseButtonEvent.x, mouseButtonEvent.y)
-            }
-        }
-
-        if (mouseButtonEvent.button() == 1) {
-            OverlayManager.getHoveredOverlay(mouseButtonEvent.x.toFloat(), mouseButtonEvent.y.toFloat())?.let {
-                OverlayConfigEditor.open(it)
-            }
+        if (mouseButtonEvent.button() == 0) {
+            OverlayManager.getHoveredOverlay(mouseButtonEvent.x.toFloat(), mouseButtonEvent.y.toFloat())?.startDragging(mouseButtonEvent.x, mouseButtonEvent.y)
         }
         return super.mouseClicked(mouseButtonEvent, bl)
     }
 
     override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
-        if (!OverlayConfigEditor.opened)
-            OverlayManager.getHoveredOverlay(mouseButtonEvent.x.toFloat(), mouseButtonEvent.y.toFloat())?.onMouseDragged(mouseButtonEvent.x, mouseButtonEvent.y)
 
         return super.mouseDragged(mouseButtonEvent, deltaX, deltaY)
     }
@@ -109,52 +94,4 @@ object OverlayEditor : Screen(Component.literal("Frozen overlay editor")) {
     }
 
     override fun isPauseScreen(): Boolean = false
-}
-
-object OverlayConfigEditor {
-    const val WIDTH = 400f
-    const val HEIGHT = 250f
-
-    var opened = false
-
-    val enabledButton = BooleanComponent("", false)
-
-    var overlay: Overlay? = null
-
-    var x: Float = 0f
-    var y: Float = 0f
-
-    fun open(ov: Overlay) {
-        overlay = ov
-        opened = true
-        x = mouseX / getStandardGuiScale()
-        y = mouseY / getStandardGuiScale()
-        enabledButton.value = overlay!!.setting.value
-    }
- 
-    fun close() {
-        overlay = null
-        x = 0f
-        y = 0f
-        opened = false
-    }
-
-    fun render(context: GuiGraphics) {
-        if (!opened) return
-        val scale = getStandardGuiScale()
-
-        NanoVGSpecials.draw(context, 0, 0, context.guiWidth(), context.guiHeight()) {
-            NanoVGHelper.scale(scale, scale)
-
-            NanoVGHelper.roundedRect(x, y, WIDTH, HEIGHT, 12f, Colors.gray26.rgba)
-            NanoVGHelper.text(NanoVGHelper.defaultFont, overlay!!.configName, x + 4, y + 4, 16f, Colors.WHITE.rgba)
-            enabledButton.render(x + 10, y + 20)
-        }
-    }
-
-    fun onMouseClicked(mouseButtonEvent: MouseButtonEvent) {
-        enabledButton.onMouseClicked(mouseButtonEvent)
-    }
-
-    inline val isHovered: Boolean get() = isAreaHovered(x, y, WIDTH, WIDTH, true)
 }

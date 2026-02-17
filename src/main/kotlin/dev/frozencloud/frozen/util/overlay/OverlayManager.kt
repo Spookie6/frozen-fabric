@@ -17,7 +17,7 @@ object OverlayManager {
     @EventHandler
     fun onHudRender(event: HudRenderEvent) {
         if (Overlay.inEditMode) return
-        overlays.forEach {
+        overlays.filter { it.config.enabled }.forEach {
             it.render(event.drawContext, event.renderTickCounter)
         }
     }
@@ -27,6 +27,7 @@ object OverlayManager {
 
         configMap[overlay.configName]?.let { savedConfig ->
             overlay.config.apply {
+                enabled = savedConfig.enabled
                 x = savedConfig.x
                 y = savedConfig.y
                 scale = savedConfig.scale
@@ -78,6 +79,7 @@ object OverlayManager {
 
     @Serializable
     data class Config(
+        var enabled: Boolean = false,
         var x: Int = 0,
         var y: Int = 0,
         var scale: Float = 1f,

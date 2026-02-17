@@ -7,8 +7,6 @@ import dev.frozencloud.frozen.events.impl.TickEvent
 import dev.frozencloud.frozen.features.impl.general.Wardrobe
 import dev.frozencloud.frozen.features.impl.rendering.Interface
 import dev.frozencloud.frozen.features.impl.test.EtherWarp
-import dev.frozencloud.frozen.features.impl.test.Test
-import dev.frozencloud.frozen.features.impl.test.Testing
 import dev.frozencloud.frozen.features.impl.test.TickTimers
 import dev.frozencloud.frozen.ui.settings.impl.KeybindSetting
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
@@ -37,7 +35,7 @@ object ModuleManager {
 
     init {
         registerModules(ModulesConfig(file = File(Frozen.configFile, "config.json")),
-            Test, Testing, Interface, TickTimers, EtherWarp, Wardrobe
+            Interface, TickTimers, EtherWarp, Wardrobe
         )
     }
 

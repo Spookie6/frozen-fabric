@@ -345,6 +345,18 @@ object NanoVGHelper {
         nvgFill(vg)
     }
 
+    fun image(image: Image, x: Float, y: Float, w: Float, h: Float, radius: Float, color: Int) {
+        setColor(color, this.color)
+        nvgImagePattern(vg, x, y, w, h, 0f, getImage(image), 1f, paint)
+
+        nvgFillColor(vg, this.color)
+
+        nvgBeginPath(vg)
+        nvgRoundedRect(vg, x, y, w, h + .5f, radius)
+        nvgFillPaint(vg, paint)
+        nvgFill(vg)
+    }
+
     fun loadFont(font: Font): Int {
         return fonts.getOrPut(font) {
             val buffer = font.buffer()

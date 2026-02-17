@@ -7,11 +7,8 @@ import net.minecraft.client.gui.GuiGraphics
 
 class DynamicOverlay(
     configName: String,
-    setting: BooleanSetting,
-    islands: List<Island>,
-    renderCondition: () -> Boolean = { true },
     val renderFunc: (context: GuiGraphics, example: Boolean, ov: Overlay) -> Dimensions
-) : Overlay(configName, setting, renderCondition, islands) {
+) : Overlay(configName, { true }, listOf(Island.Unknown)) {
 
     override fun render(context: GuiGraphics, renderTickCounter: DeltaTracker) {
         dimensions = renderFunc(context, inEditMode, this)

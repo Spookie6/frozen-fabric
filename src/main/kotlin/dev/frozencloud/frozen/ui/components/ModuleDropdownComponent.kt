@@ -53,8 +53,11 @@ class ModuleDropdownComponent(val module: Module) {
             )
 
             NanoVGHelper.scissor(x, y + HEIGHT, WIDTH, lastExtraHeight + 1)
+            var extraSettingHeight = 0f
             renderableSettings.filter{ it.isVisible }.forEachIndexed { index, setting ->
-                extraHeight += setting.render(x + PADDING, y + HEIGHT + PADDING + (40f * index), x + WIDTH - PADDING, MouseUtil.mouseX, MouseUtil.mouseY)
+                val res = setting.render(x + PADDING, y + HEIGHT + PADDING + (40f * index) + extraSettingHeight, x + WIDTH - PADDING, MouseUtil.mouseX, MouseUtil.mouseY)
+                extraSettingHeight += res
+                extraHeight += res
             }
             NanoVGHelper.resetScissor()
         }
