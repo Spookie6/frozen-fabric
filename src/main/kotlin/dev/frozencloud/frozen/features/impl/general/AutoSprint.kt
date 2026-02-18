@@ -14,7 +14,8 @@ object AutoSprint : Module(
     val SkyblockOnly by BooleanSetting("Skyblock only", false, "")
     val dynamicOverlaySetting by OverlaySetting("Overlay", "", "Auto Sprint") { context, example, ov ->
         val sprinting = if (SkyblockOnly) onSkyblock else this.enabled
-        context.drawString(mc.font, "Sprinting: $sprinting", ov.config.x, ov.config.y, Colors.WHITE.rgba)
+
+        context.drawString(mc.font, "Sprinting: $sprinting", ov.PADDING, ov.PADDING, Colors.WHITE.rgba)
 
         return@OverlaySetting Overlay.Dimensions(mc.font.width("Sprinting: $sprinting"), mc.font.lineHeight)
     }

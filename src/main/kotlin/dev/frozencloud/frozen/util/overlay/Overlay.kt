@@ -24,7 +24,7 @@ abstract class Overlay(
         val inEditMode: Boolean get() = mc.screen == OverlayEditor
     }
 
-    val PADDING = 1
+    val PADDING = 2
     val LINE_PADDING = 2
     val SCALE_STEP = 0.25f
 
@@ -47,9 +47,12 @@ abstract class Overlay(
 
     inline val scaledHeight: Int
         get() = (dimensions.height * config.scale).toInt()
-    
+
+    inline val scaledPadding: Int
+        get() = (PADDING * config.scale).toInt()
+
     fun isMouseOver(mouseX: Float, mouseY: Float): Boolean {
-        return mouseX in config.x.toFloat()..config.x.toFloat() + dimensions.width * config.scale && mouseY in config.y.toFloat()..config.y + dimensions.height * config.scale
+        return mouseX in config.x.toFloat()..config.x + scaledWidth + scaledPadding * 2f && mouseY in config.y.toFloat()..config.y + scaledHeight + scaledPadding * 2f
     }
 
     fun startDragging(mx: Double, my: Double) {
@@ -101,8 +104,8 @@ abstract class Overlay(
     fun clampPos(x: Int, y: Int) {
         val dims = OverlayManager.getScaledScreen()
 
-        config.x = if (config.centerX) dims.width / 2 - scaledWidth / 2 else max(0, min(x, dims.width - (dimensions.width * config.scale).toInt() - PADDING * 2))
-        config.y = if (config.centerY) dims.height / 2 - scaledHeight / 2 else  max(0, min(y, dims.height - (dimensions.height * config.scale).toInt() - PADDING * 2))
+        config.x = if (config.centerX) dims.width / 2 - scaledWidth / 2 else max(0, min(x, dims.width - (dimensions.width * config.scale).toInt() - scaledPadding * 2))
+        config.y = if (config.centerY) dims.height / 2 - scaledHeight / 2 else  max(0, min(y, dims.height - (dimensions.height * config.scale).toInt() - scaledPadding * 2))
     }
 
     data class Dimensions(

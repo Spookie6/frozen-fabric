@@ -49,17 +49,17 @@ object OverlayEditor : Screen(Component.literal("Frozen overlay editor")) {
             val config = it.config
             val scaledWidth = it.scaledWidth
             val scaledHeight = it.scaledHeight
-            val PADDING = it.PADDING
+            val padding = it.scaledPadding
 
-            context.fill(config.x, config.y, config.x + scaledWidth + PADDING * 2, config.y + scaledHeight + PADDING * 2, Color(255, 255, 255, 125f).rgba)
+            context.fill(config.x, config.y, config.x + scaledWidth + padding * 2, config.y + scaledHeight + padding * 2, Color(255, 255, 255, 125f).rgba)
 
             it.render(context, mc.deltaTracker)
 
             val color = if (it.dragging || it == OverlayManager.getHoveredOverlay(mouseX.toFloat(), mouseY.toFloat())) Colors.GlacialAccent.rgba else Colors.WHITE.rgba
-            context.fill(config.x, config.y, config.x + scaledWidth + PADDING * 2, config.y + 1, color) // Top
-            context.fill(config.x, config.y + scaledHeight + PADDING * 2, config.x + scaledWidth + PADDING * 2, config.y + scaledHeight + PADDING * 2 - 1, color) // Bottom
-            context.fill(config.x, config.y, config.x + 1, config.y + scaledHeight + PADDING * 2, color) // Left
-            context.fill(config.x + scaledWidth + PADDING * 2, config.y, config.x + scaledWidth + PADDING * 2 - 1, config.y + scaledHeight + PADDING * 2, color) // Right
+            context.fill(config.x, config.y, config.x + scaledWidth + padding * 2, config.y + 1, color) // Top
+            context.fill(config.x, config.y + scaledHeight + padding * 2, config.x + scaledWidth + padding * 2, config.y + scaledHeight + padding * 2 - 1, color) // Bottom
+            context.fill(config.x, config.y, config.x + 1, config.y + scaledHeight + padding * 2, color) // Left
+            context.fill(config.x + scaledWidth + padding * 2, config.y, config.x + scaledWidth + padding * 2 - 1, config.y + scaledHeight + padding * 2, color) // Right
         }
 
         OverlayManager.getHoveredOverlay(mouseX.toFloat(), mouseY.toFloat())?.apply {

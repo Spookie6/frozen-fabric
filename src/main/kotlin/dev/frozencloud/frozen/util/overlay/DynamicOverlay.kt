@@ -11,7 +11,13 @@ class DynamicOverlay(
 ) : Overlay(configName, { true }, listOf(Island.Unknown)) {
 
     override fun render(context: GuiGraphics, renderTickCounter: DeltaTracker) {
+        context.pose().pushMatrix()
+        context.pose().translate(config.x.toFloat(), config.y.toFloat())
+        context.pose().scale(config.scale)
+
         dimensions = renderFunc(context, inEditMode, this)
+
+        context.pose().popMatrix()
     }
 
     @Suppress
