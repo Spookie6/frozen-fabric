@@ -29,6 +29,11 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
     const val MODULE_DROPDOWN_LEFT_X = 420f
     const val MODULE_DROPDOWN_RIGHT_X = 520f + ModuleDropdownComponent.WIDTH
 
+    private var scrollY = 0f
+    private var targetScrollY = 0f
+    private var maxScroll = 0f
+    private const val SCROLL_STEP = 40f
+
     var preventClosing = false
 
     private var descr: Description? = null
@@ -61,8 +66,16 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
                 button.draw(40f, 250f + (index * 64f))
             }
 
-            NanoVGHelper.pushScissor(MODULE_DROPDOWN_LEFT_X, 120f, MODULE_DROPDOWN_RIGHT_X + ModuleDropdownComponent.WIDTH, 840f)
+            scrollY += (targetScrollY - scrollY) * 0.15f
+
+            NanoVGHelper.pushScissor(MODULE_DROPDOWN_LEFT_X - 10f, 120f, (MODULE_DROPDOWN_RIGHT_X + ModuleDropdownComponent.WIDTH) - MODULE_DROPDOWN_LEFT_X + 20f, 840f)
+
+            NanoVGHelper.push()
+            NanoVGHelper.translate(0f, scrollY)
+
             val extraHeight = mutableListOf(0f, 0f)
+            var totalMaxHeight = 0f
+
             moduleDropdownsByCategory[currentCategory]
                 ?.filter {
                     it.module.name.contains(SearchBarComponent.currentSearch, true) ||
@@ -73,10 +86,19 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
                     val column = index % 2
                     val left = column == 0
                     val row = index / 2
+
                     val y = 120f + extraHeight[column] + row * (ModuleDropdownComponent.HEIGHT + 16f)
                     val extra = dropdown.draw(if (left) MODULE_DROPDOWN_LEFT_X else MODULE_DROPDOWN_RIGHT_X, y)
+
                     extraHeight[column] += extra
-            }
+
+                    val currentBottom = y + ModuleDropdownComponent.HEIGHT + extra - 120f
+                    if (currentBottom > totalMaxHeight) totalMaxHeight = currentBottom
+                }
+
+            maxScroll = (totalMaxHeight - 800f).coerceAtLeast(0f)
+
+            NanoVGHelper.pop()
             NanoVGHelper.popScissor()
 
             descr?.let {
@@ -100,6 +122,15 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
         SearchBarComponent.onMouseReleased()
         moduleDropdownsByCategory[currentCategory]?.forEach { it.onMouseReleased(mouseButtonEvent) }
         return super.mouseReleased(mouseButtonEvent)
+    }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
+        targetScrollY += verticalAmount.toFloat() * SCROLL_STEP
+
+        if (targetScrollY > 0f) targetScrollY = 0f
+        if (targetScrollY < -maxScroll) targetScrollY = -maxScroll
+
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
 
     override fun keyPressed(keyEvent: KeyEvent): Boolean {

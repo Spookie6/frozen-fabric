@@ -345,14 +345,26 @@ object NanoVGHelper {
         nvgFill(vg)
     }
 
-    fun image(image: Image, x: Float, y: Float, w: Float, h: Float, radius: Float, color: Int) {
-        setColor(color, this.color)
-        nvgImagePattern(vg, x, y, w, h, 0f, getImage(image), 1f, paint)
+    fun image(image: Image, x: Float, y: Float, w: Float, h: Float, radius: Float, colorInt: Int) {
+        val imgId = getImage(image)
+        if (imgId == -1) return
 
-        nvgFillColor(vg, this.color)
+        // 1. Create the pattern paint
+        // The 1.0f at the end is the alpha/opacity
+        nvgImagePattern(vg, x, y, w, h, 0f, imgId, 1f, paint)
 
+        // 2. TINTING: Manually set the paint's inner and outer colors
+        // In NanoVG, for an image pattern, these colors act as multipliers.
+        // If you set them to your target color, it tints the image.
+        setColor(colorInt, color) // Set our helper 'color' NVGColor object
+
+        // Copy our color into the paint's color slots
+        paint.innerColor(color)
+        paint.outerColor(color)
+
+        // 3. Render
         nvgBeginPath(vg)
-        nvgRoundedRect(vg, x, y, w, h + .5f, radius)
+        nvgRoundedRect(vg, x, y, w, h + 0.5f, radius)
         nvgFillPaint(vg, paint)
         nvgFill(vg)
     }
