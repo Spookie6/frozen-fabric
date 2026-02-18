@@ -2,7 +2,6 @@ package dev.frozencloud.frozen.ui
 
 import dev.frozencloud.frozen.Frozen
 import dev.frozencloud.frozen.Frozen.mc
-import dev.frozencloud.frozen.config.ModulesConfig
 import dev.frozencloud.frozen.features.Category
 import dev.frozencloud.frozen.features.ModuleManager
 import dev.frozencloud.frozen.ui.components.CategoryButtonComponent
@@ -62,7 +61,7 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
                 button.draw(40f, 250f + (index * 64f))
             }
 
-            NanoVGHelper.scissor(MODULE_DROPDOWN_LEFT_X, 120f, MODULE_DROPDOWN_RIGHT_X + ModuleDropdownComponent.WIDTH, 840f)
+            NanoVGHelper.pushScissor(MODULE_DROPDOWN_LEFT_X, 120f, MODULE_DROPDOWN_RIGHT_X + ModuleDropdownComponent.WIDTH, 840f)
             val extraHeight = mutableListOf(0f, 0f)
             moduleDropdownsByCategory[currentCategory]
                 ?.filter {
@@ -78,7 +77,7 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
                     val extra = dropdown.draw(if (left) MODULE_DROPDOWN_LEFT_X else MODULE_DROPDOWN_RIGHT_X, y)
                     extraHeight[column] += extra
             }
-            NanoVGHelper.resetScissor()
+            NanoVGHelper.popScissor()
 
             descr?.let {
                 if (it.hoverHandler.percent() == 0f) descr = null

@@ -8,6 +8,7 @@ import dev.frozencloud.frozen.ui.settings.impl.ColorSetting
 import dev.frozencloud.frozen.ui.settings.impl.KeybindSetting
 import dev.frozencloud.frozen.ui.settings.impl.NumberSetting
 import dev.frozencloud.frozen.ui.settings.impl.OverlaySetting
+import dev.frozencloud.frozen.ui.settings.impl.SelectorSetting
 import dev.frozencloud.frozen.util.ChatUtil
 import dev.frozencloud.frozen.util.overlay.TextOverlay
 import dev.frozencloud.frozen.util.render.Color
@@ -38,5 +39,5 @@ object EtherWarp : Module(
             exampleText = "Hallo daar"
     ), "Overlay option description thingy")
 
-//    val dropDownSetting by DropdownSetting("Dropdown thing", "Outlined", ["Outlined", "Filled", "Filled outline"])
+    val selectorSetting by SelectorSetting("Selector thing", "Outlined", listOf("Outlined", "Filled", "Filled outline"), "Selector option description thingy")
 }

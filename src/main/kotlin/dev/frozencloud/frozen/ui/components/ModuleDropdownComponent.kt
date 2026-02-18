@@ -2,8 +2,6 @@ package dev.frozencloud.frozen.ui.components
 
 import dev.frozencloud.frozen.features.Module
 import dev.frozencloud.frozen.ui.settings.RenderableSetting
-import dev.frozencloud.frozen.ui.settings.impl.ColorSetting
-import dev.frozencloud.frozen.ui.settings.impl.KeybindSetting
 import dev.frozencloud.frozen.util.render.Colors
 import dev.frozencloud.frozen.util.ui.MouseUtil
 import dev.frozencloud.frozen.util.ui.MouseUtil.isAreaHovered
@@ -13,7 +11,6 @@ import dev.frozencloud.frozen.util.ui.rendering.NanoVGHelper
 import net.minecraft.client.input.CharacterEvent
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
-import kotlin.math.exp
 
 class ModuleDropdownComponent(val module: Module) {
     var lastX = 0f
@@ -60,7 +57,7 @@ class ModuleDropdownComponent(val module: Module) {
         )
 
         if (visualExtraHeight > 0f) {
-            NanoVGHelper.scissor(x, y + HEIGHT, WIDTH, visualExtraHeight + 1f)
+            NanoVGHelper.pushScissor(x, y + HEIGHT, WIDTH, visualExtraHeight + 1f)
 
             var currentYOffset = y + HEIGHT + PADDING
             renderableSettings.filter { it.isVisible }.forEach { setting ->
@@ -68,7 +65,7 @@ class ModuleDropdownComponent(val module: Module) {
                 currentYOffset += 40f + res
                 setting.lastExtraHeight = res
             }
-            NanoVGHelper.resetScissor()
+            NanoVGHelper.popScissor()
         }
 
         val color = when {

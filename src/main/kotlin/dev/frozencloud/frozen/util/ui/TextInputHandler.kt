@@ -57,7 +57,7 @@ class TextInputHandler(
         if (previousMousePos != mouseX to mouseY) mouseDragged(mouseX)
         previousMousePos = mouseX to mouseY
 
-        NanoVGHelper.scissor(x, y, width, height)
+        NanoVGHelper.pushScissor(x, y, width, height)
         if (selectionWidth != 0f) NanoVGHelper.roundedRect(
             x + caretX - textOffset,
             y,
@@ -66,7 +66,7 @@ class TextInputHandler(
             2f,
             Colors.MINECRAFT_BLUE.withAlpha(150f).rgba
         )
-        NanoVGHelper.resetScissor()
+        NanoVGHelper.popScissor()
 
         if (listening) {
             val time = System.currentTimeMillis()

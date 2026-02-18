@@ -386,18 +386,15 @@ object NanoVGHelper {
         return nvgTextBounds(vg, 0f, 0f, text, fontBounds)
     }
 
-    fun scissor(x: Float, y: Float, w: Float, h: Float) {
-        scissor = Scissor(scissor, x, y, w, h)   // note: pass w/h instead of maxX/maxY
+    fun pushScissor(x: Float, y: Float, w: Float, h: Float) {
+        scissor = Scissor(scissor, x, y, w + x, h + y)
         scissor?.applyScissor()
     }
 
-    fun resetScissor() {
+    fun popScissor() {
+        nvgResetScissor(vg)
         scissor = scissor?.previous
-        if (scissor != null) {
-            scissor!!.applyScissor()
-        } else {
-            nvgResetScissor(vg)
-        }
+        scissor?.applyScissor()
     }
 
     fun destroy() {
@@ -409,47 +406,15 @@ object NanoVGHelper {
         color2.free()
     }
 
-    private class Scissor(
-        val previous: Scissor?,
-        val x: Float,
-        val y: Float,
-        val w: Float,
-        val h: Float
-    ) {
-        val maxX: Float get() = x + w
-        val maxY: Float get() = y + h
-
+    private class Scissor(val previous: Scissor?, val x: Float, val y: Float, val maxX: Float, val maxY: Float) {
         fun applyScissor() {
-            val finalX: Float
-            val finalY: Float
-            val finalW: Float
-            val finalH: Float
-
-            if (previous == null) {
-                finalX = x
-                finalY = y
-                finalW = w
-                finalH = h
-            } else {
-                val prevX = previous.x
-                val prevY = previous.y
-                val prevMaxX = previous.maxX
-                val prevMaxY = previous.maxY
-
-                finalX = max(x, prevX)
-                finalY = max(y, prevY)
-
-                val finalMaxX = min(maxX, prevMaxX)
-                val finalMaxY = min(maxY, prevMaxY)
-
-                finalW = max(0f, finalMaxX - finalX)
-                finalH = max(0f, finalMaxY - finalY)
-            }
-
-            if (finalW <= 0f || finalH <= 0f) {
-                nvgResetScissor(vg)
-            } else {
-                nvgScissor(vg, finalX, finalY, finalW, finalH)
+            if (previous == null) nvgScissor(vg, x, y, maxX - x, maxY - y)
+            else {
+                val x = max(x, previous.x)
+                val y = max(y, previous.y)
+                val width = max(0f, (min(maxX, previous.maxX) - x))
+                val height = max(0f, (min(maxY, previous.maxY) - y))
+                nvgScissor(vg, x, y, width, height)
             }
         }
     }

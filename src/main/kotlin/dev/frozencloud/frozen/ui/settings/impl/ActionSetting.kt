@@ -27,8 +27,8 @@ class ActionSetting(
 
     companion object {
         const val BUTTON_WIDTH = 120f
-        const val BUTTON_HEIGHT = 20f
-        const val BUTTON_PADDING = 2f
+        const val BUTTON_HEIGHT = 22f
+        const val BUTTON_PADDING = 3f
     }
 
     val buttonTextWidth by lazy { NanoVGHelper.textWidth("Click", 16f, NanoVGHelper.defaultFont) }
