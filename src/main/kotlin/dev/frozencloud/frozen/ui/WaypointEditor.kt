@@ -15,9 +15,10 @@ import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 
 object WaypointEditor : Screen(Component.literal("Waypoint Editor")) {
-    private val WIDTH = 1200f
-    private val HEIGHT = 800f
-    private val PADDING = 10f
+
+    private const val WIDTH = 1200f
+    private const val HEIGHT = 800f
+    private const val PADDING = 20f
 
     val waypointsByIsland = WaypointConfig.waypoints.associateBy { it.island }
 
@@ -49,7 +50,8 @@ override fun onClose() {
 
         NanoVGSpecials.draw(guiGraphics, 0, 0, guiGraphics.guiWidth(), guiGraphics.guiHeight()) {
             NanoVGHelper.scale(scale, scale)
-            NanoVGHelper.roundedRect(x, y, WIDTH, HEIGHT, 12f, Colors.gray21.rgba)
+            NanoVGHelper.dropShadow(x, y, WIDTH, HEIGHT, 5f, 2f, 12f)
+            NanoVGHelper.roundedRect(x, y, WIDTH, HEIGHT, 12f, Colors.Background.rgba)
 
             dropDown.render(x + WIDTH - IslandsDropdownComponent.WIDTH - PADDING, y + PADDING)
         }

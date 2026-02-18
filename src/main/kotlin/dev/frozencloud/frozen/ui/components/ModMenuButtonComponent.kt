@@ -17,7 +17,14 @@ class ModMenuButtonComponent(val text: String, val action: () -> Unit) {
         const val HEIGHT = 50f
     }
 
-    val textWidth by lazy { NanoVGHelper.textWidth(text, 16f, NanoVGHelper.defaultFont) }
+    private var cachedWidth = -1f
+    val textWidth: Float
+        get() {
+            if (cachedWidth <= 0f) {
+                cachedWidth = NanoVGHelper.textWidth(text, 16f, NanoVGHelper.defaultFont)
+            }
+            return cachedWidth
+        }
     val anim = ColorAnimation(100)
 
     fun render(x: Float, y: Float) {
@@ -35,7 +42,7 @@ class ModMenuButtonComponent(val text: String, val action: () -> Unit) {
         lastHovered = isHovered
 
         NanoVGHelper.roundedRect(x, y, WIDTH, HEIGHT,6f, anim.get(Colors.GlacialAccentLight, Colors.GlacialAccent.darker(), !isHovered).rgba)
-        NanoVGHelper.text(NanoVGHelper.defaultFont, text, x + WIDTH / 2f - textWidth / 2, y + HEIGHT / 2f - 8f, 16f, Colors.gray21.rgba)
+        NanoVGHelper.text(NanoVGHelper.defaultFont, text, x + WIDTH / 2f - textWidth / 2, y + HEIGHT / 2f - 8f, 16f, Colors.Background.rgba)
     }
 
     fun onMouseClicked(event: MouseButtonEvent) {

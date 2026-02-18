@@ -1,9 +1,10 @@
 package dev.frozencloud.frozen.util.skyblock
 
+import dev.frozencloud.frozen.Frozen
 import dev.frozencloud.frozen.util.ui.rendering.NanoVGHelper
 
 enum class Island(private val island: String) {
-    SingePlayer("Singleplayer"),
+    SinglePlayer("Singleplayer"),
     PrivateIsland("Private Island"),
     Garden("Garden"),
     SpiderDen("Spider's Den"),
@@ -33,13 +34,14 @@ enum class Island(private val island: String) {
     val textWidth by lazy { NanoVGHelper.textWidth(this.toString(), 16f, NanoVGHelper.defaultFont) }
 
     fun isArea(area: Island): Boolean {
-        if (this == SingePlayer) return true
+        if (this == SinglePlayer) return true
         return this == area
     }
 
     companion object {
         fun findMatch(match: String): Island {
-            return entries.firstOrNull { match.contains(it.island) } ?: Island.Unknown
+            if (Frozen.mc.isSingleplayer) return SinglePlayer
+            return entries.firstOrNull { match.contains(it.island) } ?: Unknown
         }
     }
 }

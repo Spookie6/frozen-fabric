@@ -108,7 +108,7 @@ class SelectorSetting(
         if (extended && mouseButtonEvent.button() == 0) {
             val hoveringOptionIndex = getHoveredOption()
             if (hoveringOptionIndex != -1) {
-                index = hoveringOptionIndex // Update the value
+                index = hoveringOptionIndex
                 extended = false
                 anim.start()
                 return true
