@@ -40,24 +40,33 @@ class ModuleDropdownComponent(val module: Module) {
         lastX = x
         lastY = y
 
-        var extraHeight = 0f
-        if (expanded || anim.isAnimating()) {
-            extraHeight = anim.get(0f, PADDING * 2 + renderableSettings.filter { it.isVisible }.size * 40f, !expanded)
-            NanoVGHelper.roundedRect(
-                x,
-                y,
-                WIDTH,
-                HEIGHT + lastExtraHeight,
-                16f,
-                Colors.BackgroundDarker.rgba
-            )
+        var totalSettingsHeight = PADDING * 2
+        renderableSettings.filter { it.isVisible }.forEachIndexed { index, setting ->
+            totalSettingsHeight += 40f
+            totalSettingsHeight += setting.lastExtraHeight
+        }
 
-            NanoVGHelper.scissor(x, y + HEIGHT, WIDTH, lastExtraHeight + 1)
-            var extraSettingHeight = 0f
-            renderableSettings.filter{ it.isVisible }.forEachIndexed { index, setting ->
-                val res = setting.render(x + PADDING, y + HEIGHT + PADDING + (40f * index) + extraSettingHeight, x + WIDTH - PADDING, MouseUtil.mouseX, MouseUtil.mouseY)
-                extraSettingHeight += res
-                extraHeight += res
+        val visualExtraHeight = if (expanded || anim.isAnimating()) {
+            anim.get(0f, totalSettingsHeight, !expanded)
+        } else 0f
+
+        NanoVGHelper.roundedRect(
+            x,
+            y,
+            WIDTH,
+            HEIGHT + visualExtraHeight,
+            16f,
+            Colors.BackgroundDarker.rgba
+        )
+
+        if (visualExtraHeight > 0f) {
+            NanoVGHelper.scissor(x, y + HEIGHT, WIDTH, visualExtraHeight + 1f)
+
+            var currentYOffset = y + HEIGHT + PADDING
+            renderableSettings.filter { it.isVisible }.forEach { setting ->
+                val res = setting.render(x + PADDING, currentYOffset, x + WIDTH - PADDING, MouseUtil.mouseX, MouseUtil.mouseY)
+                currentYOffset += 40f + res
+                setting.lastExtraHeight = res
             }
             NanoVGHelper.resetScissor()
         }
@@ -67,19 +76,11 @@ class ModuleDropdownComponent(val module: Module) {
             else -> if (module.enabled) Colors.GlacialAccentDark else Colors.DisabledBackground
         }.rgba
 
-        NanoVGHelper.roundedRect(
-            x,
-            y,
-            WIDTH,
-            HEIGHT,
-            16f,
-            color
-        )
-
+        NanoVGHelper.roundedRect(x, y, WIDTH, HEIGHT, 16f, color)
         NanoVGHelper.text(NanoVGHelper.defaultFont, module.name, x + PADDING, y + 12f, 24f, Colors.TextPrimary.rgba)
         NanoVGHelper.text(NanoVGHelper.defaultFont, module.description, x + textWidth + PADDING + 8f, y + 16f, 18f, Colors.TextMuted.rgba)
 
-        lastExtraHeight = extraHeight
+        lastExtraHeight = visualExtraHeight
         return lastExtraHeight
     }
 
@@ -91,9 +92,6 @@ class ModuleDropdownComponent(val module: Module) {
         if (isHovered && mouseButtonEvent.button() == 1) {
             if (module.settings.isEmpty()) return
             expanded = !expanded
-            if (!expanded) {
-                module.settings.filter { it.value is ColorSetting }.forEach { (it.value as ColorSetting).close() }
-            }
             anim.start()
         }
 

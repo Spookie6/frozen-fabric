@@ -94,7 +94,7 @@ class ColorSetting(
         textInputHandler.height = 18f
         textInputHandler.draw(mx, my)
 
-        // --- Picker Logic ---
+        // Picker
         val targetHeight = PICKER_SIZE + 24f
         val currentPickerHeight = expandAnim.get(0f, targetHeight, !extended)
 
@@ -103,7 +103,7 @@ class ColorSetting(
         val pickerY = y + rowHeight + 8f
         val pickerX = right - PICKER_SIZE
 
-        NanoVGHelper.scissor(x, y + rowHeight, width + 3f, currentPickerHeight + 1f)
+        if (expandAnim.isAnimating()) NanoVGHelper.scissor(x, y + rowHeight, width + 3f, currentPickerHeight + 1f)
 
         // Saturation & Brightness Box
         NanoVGHelper.gradientRect(pickerX, pickerY, PICKER_SIZE, PICKER_SIZE, Colors.WHITE.rgba, value.hsbMax().rgba, Gradient.LeftToRight, 4f)
@@ -136,7 +136,7 @@ class ColorSetting(
             handleColorDrag(mx, my, pickerX, pickerY, PICKER_SIZE, hueSliderX, HUE_SLIDER_WIDTH, 0f)
         }
 
-        NanoVGHelper.resetScissor()
+        if (expandAnim.isAnimating()) NanoVGHelper.resetScissor()
         return currentPickerHeight
     }
 
@@ -184,13 +184,6 @@ class ColorSetting(
     override fun mouseReleased(mouseButtonEvent: MouseButtonEvent) {
         draggingSection = null
         textInputHandler.mouseReleased()
-    }
-
-    fun close() {
-        if (this.extended) {
-            this.extended = false
-            expandAnim.start()
-        }
     }
 
     override fun keyPressed(input: KeyEvent): Boolean = textInputHandler.keyPressed(input)

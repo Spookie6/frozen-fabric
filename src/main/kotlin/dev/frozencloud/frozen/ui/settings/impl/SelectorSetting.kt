@@ -3,7 +3,6 @@ package dev.frozencloud.frozen.ui.settings.impl
 import com.google.gson.*
 import dev.frozencloud.frozen.ui.settings.RenderableSetting
 import dev.frozencloud.frozen.ui.settings.Saving
-import java.lang.reflect.Type
 
 class SelectorSetting(
     name: String,

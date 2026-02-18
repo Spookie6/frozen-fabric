@@ -20,6 +20,7 @@ abstract class RenderableSetting<T>(
     protected var lastX = 0f
     protected var lastY = 0f
     protected var lastRight = 0f
+    var lastExtraHeight = 0f
     var listening = false
 
     open fun render(x: Float, y: Float, right: Float, mouseX: Float, mouseY: Float): Float {
