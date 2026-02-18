@@ -5,6 +5,7 @@ import dev.frozencloud.frozen.features.Module
 import dev.frozencloud.frozen.ui.settings.impl.ActionSetting
 import dev.frozencloud.frozen.ui.settings.impl.BooleanSetting
 import dev.frozencloud.frozen.ui.settings.impl.ColorSetting
+import dev.frozencloud.frozen.ui.settings.impl.DropdownSetting
 import dev.frozencloud.frozen.ui.settings.impl.KeybindSetting
 import dev.frozencloud.frozen.ui.settings.impl.NumberSetting
 import dev.frozencloud.frozen.ui.settings.impl.OverlaySetting
@@ -40,4 +41,5 @@ object EtherWarp : Module(
     ), "Overlay option description thingy")
 
     val selectorSetting by SelectorSetting("Selector thing", "Outlined", listOf("Outlined", "Filled", "Filled outline"), "Selector option description thingy")
+    val dropdownSetting by DropdownSetting("Dropdown thing", false, "Dropdown option thingy")
 }
