@@ -5,7 +5,6 @@ import net.minecraft.world.phys.Vec3
 object PearlUtil {
     const val GRAVITY = 0.03
     const val DRAG = 0.99
-    const val TERMINAL_VELOCITY = 2.97
     const val BASE_VELOCITY = 1.5
 
     const val MAX_TICKS = 100

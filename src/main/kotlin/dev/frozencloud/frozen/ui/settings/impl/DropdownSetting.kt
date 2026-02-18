@@ -35,7 +35,7 @@ class DropdownSetting(
 
         NanoVGHelper.push()
         NanoVGHelper.translate(centerX, centerY)
-        NanoVGHelper.rotate(Math.toRadians(anim.get(0f, 90f, !enabled).toDouble()).toFloat())
+        NanoVGHelper.rotate(Math.toRadians(anim.get(90f, 0f, !enabled).toDouble()).toFloat())
 
         NanoVGHelper.image(
             ConfigScreen.chevronImage,

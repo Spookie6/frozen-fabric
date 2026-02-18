@@ -45,7 +45,7 @@ abstract class Overlay(
     inline val scaledWidth: Int
         get() = (dimensions.width * config.scale).toInt()
 
-    inline val scaleHeight: Int
+    inline val scaledHeight: Int
         get() = (dimensions.height * config.scale).toInt()
     
     fun isMouseOver(mouseX: Float, mouseY: Float): Boolean {
@@ -102,7 +102,7 @@ abstract class Overlay(
         val dims = OverlayManager.getScaledScreen()
 
         config.x = if (config.centerX) dims.width / 2 - scaledWidth / 2 else max(0, min(x, dims.width - (dimensions.width * config.scale).toInt() - PADDING * 2))
-        config.y = if (config.centerY) dims.height / 2 - scaleHeight / 2 else  max(0, min(y, dims.height - (dimensions.height * config.scale).toInt() - PADDING * 2))
+        config.y = if (config.centerY) dims.height / 2 - scaledHeight / 2 else  max(0, min(y, dims.height - (dimensions.height * config.scale).toInt() - PADDING * 2))
     }
 
     data class Dimensions(

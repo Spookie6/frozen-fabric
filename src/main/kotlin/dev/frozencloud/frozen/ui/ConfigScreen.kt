@@ -134,15 +134,17 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
     }
 
     override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        super.keyPressed(keyEvent)
         SearchBarComponent.onKeyPressed(keyEvent)
         moduleDropdownsByCategory[currentCategory]?.forEach { it.onKeyPressed(keyEvent) }
-        return super.keyPressed(keyEvent)
+        return true
     }
 
     override fun charTyped(characterEvent: CharacterEvent): Boolean {
+        super.charTyped(characterEvent)
         SearchBarComponent.onKeyTyped(characterEvent)
         moduleDropdownsByCategory[currentCategory]?.forEach { it.onCharTyped(characterEvent) }
-        return super.charTyped(characterEvent)
+        return true
     }
 
     override fun onClose() {
@@ -152,7 +154,8 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
 
     override fun isPauseScreen(): Boolean = false
 
-    override fun shouldCloseOnEsc(): Boolean = !preventClosing
+    override fun shouldCloseOnEsc(): Boolean =
+        ModuleManager.keySettingsCache.firstOrNull { it.listening } == null
 
     val hueImage = NanoVGHelper.createImage("/assets/${Frozen.MOD_ID}/HueGradient.png")
     val chevronImage = NanoVGHelper.createImage("/assets/${Frozen.MOD_ID}/chevron.svg")

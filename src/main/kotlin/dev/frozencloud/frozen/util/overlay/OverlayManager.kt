@@ -17,7 +17,7 @@ object OverlayManager {
 
     @EventHandler
     fun onHudRender(event: HudRenderEvent) {
-        if (Overlay.inEditMode || !LocationUtil.onSkyblock) return
+        if (Overlay.inEditMode) return
         overlays.filter { it.config.enabled }.forEach {
             it.render(event.drawContext, event.renderTickCounter)
         }

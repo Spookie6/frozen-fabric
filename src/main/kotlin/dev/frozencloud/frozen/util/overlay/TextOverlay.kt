@@ -29,10 +29,6 @@ class TextOverlay(
         }
         val lines = text.split("\n")
 
-        if (inEditMode) {
-            context.fill(config.x, config.y, config.x + scaledWidth + PADDING * 2, config.y + scaleHeight + PADDING * 2, Color(255, 255, 255, 125f).rgba)
-        }
-
         context.pose().pushMatrix()
         context.pose().translate(config.x.toFloat(), config.y.toFloat())
         context.pose().scale(config.scale, config.scale)

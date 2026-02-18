@@ -3,8 +3,10 @@ package dev.frozencloud.frozen.ui
 import dev.frozencloud.frozen.Frozen
 import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.ui.components.BooleanComponent
+import dev.frozencloud.frozen.util.ChatUtil
 import dev.frozencloud.frozen.util.getStandardGuiScale
 import dev.frozencloud.frozen.util.overlay.Overlay
+import dev.frozencloud.frozen.util.overlay.Overlay.Companion.inEditMode
 import dev.frozencloud.frozen.util.overlay.OverlayManager
 import dev.frozencloud.frozen.util.overlay.OverlayManager.overlays
 import dev.frozencloud.frozen.util.render.Color
@@ -41,18 +43,26 @@ object OverlayEditor : Screen(Component.literal("Frozen overlay editor")) {
         lastX = mouseX.toFloat()
         lastY = mouseY.toFloat()
 
-        context.fill(0, 0, mc.window.width, mc.window.height, Colors.BackgroundDarker.withAlpha(210f).rgba)
+        context.fill(0, 0, mc.window.width, mc.window.height, Colors.BackgroundDarker.withAlpha(80f).rgba)
 
         overlays.forEach {
+            val config = it.config
+            val scaledWidth = it.scaledWidth
+            val scaledHeight = it.scaledHeight
+            val PADDING = it.PADDING
+
+            context.fill(config.x, config.y, config.x + scaledWidth + PADDING * 2, config.y + scaledHeight + PADDING * 2, Color(255, 255, 255, 125f).rgba)
+
             it.render(context, mc.deltaTracker)
+
+            val color = if (it.dragging || it == OverlayManager.getHoveredOverlay(mouseX.toFloat(), mouseY.toFloat())) Colors.GlacialAccent.rgba else Colors.WHITE.rgba
+            context.fill(config.x, config.y, config.x + scaledWidth + PADDING * 2, config.y + 1, color) // Top
+            context.fill(config.x, config.y + scaledHeight + PADDING * 2, config.x + scaledWidth + PADDING * 2, config.y + scaledHeight + PADDING * 2 - 1, color) // Bottom
+            context.fill(config.x, config.y, config.x + 1, config.y + scaledHeight + PADDING * 2, color) // Left
+            context.fill(config.x + scaledWidth + PADDING * 2, config.y, config.x + scaledWidth + PADDING * 2 - 1, config.y + scaledHeight + PADDING * 2, color) // Right
         }
 
         OverlayManager.getHoveredOverlay(mouseX.toFloat(), mouseY.toFloat())?.apply {
-            context.fill(config.x, config.y, config.x + scaledWidth + PADDING * 2, config.y + 1, Colors.Border.rgba) // Top
-            context.fill(config.x, config.y + scaleHeight + PADDING * 2, config.x + scaledWidth + PADDING * 2, config.y + scaleHeight + PADDING * 2 - 1, Colors.Border.rgba) // Bottom
-            context.fill(config.x, config.y, config.x + 1, config.y + scaleHeight + PADDING * 2, Colors.Border.rgba) // Left
-            context.fill(config.x + scaledWidth + PADDING * 2, config.y, config.x + scaledWidth + PADDING * 2 - 1, config.y + scaleHeight + PADDING * 2, Colors.Border.rgba) // Right
-
             context.drawString(mc.font, "(${config.x}, ${config.y})", config.x, config.y - mc.font.lineHeight - 1, Colors.TextSecondary.rgba, true)
         }
     }
@@ -65,7 +75,7 @@ object OverlayEditor : Screen(Component.literal("Frozen overlay editor")) {
     }
 
     override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
-
+        OverlayManager.getHoveredOverlay(mouseButtonEvent.x.toFloat(), mouseButtonEvent.y.toFloat())?.onMouseDragged(mouseButtonEvent.x, mouseButtonEvent.y)
         return super.mouseDragged(mouseButtonEvent, deltaX, deltaY)
     }
 
