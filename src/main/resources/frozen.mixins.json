@@ -26,5 +26,8 @@
     "MixinScreen",
     "MixinScreenEffectRenderer",
     "accessors.AccessorClientLevel"
+  ],
+  "mixins": [
+    "MixinShovelItem"
   ]
 }

@@ -3,6 +3,7 @@ package dev.frozencloud.frozen.util.overlay
 import dev.frozencloud.frozen.Frozen.JSON
 import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.events.impl.HudRenderEvent
+import dev.frozencloud.frozen.util.skyblock.LocationUtil
 import dev.frozencloud.frozen.util.ui.MouseUtil
 import kotlinx.serialization.Serializable
 import meteordevelopment.orbit.EventHandler
@@ -16,7 +17,7 @@ object OverlayManager {
 
     @EventHandler
     fun onHudRender(event: HudRenderEvent) {
-        if (Overlay.inEditMode) return
+        if (Overlay.inEditMode || !LocationUtil.onSkyblock) return
         overlays.filter { it.config.enabled }.forEach {
             it.render(event.drawContext, event.renderTickCounter)
         }

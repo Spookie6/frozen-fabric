@@ -26,7 +26,7 @@ class OverlaySetting(
 ) : RenderableSetting<Boolean>(name, desc), Saving {
 
     // For dynamic overlays
-    constructor(name: String, desc: String, renderFunc: (context: GuiGraphics, example: Boolean, ov: Overlay) -> Dimensions) : this(name, DynamicOverlay(name, renderFunc), desc)
+    constructor(name: String, desc: String, configName: String, renderFunc: (context: GuiGraphics, example: Boolean, ov: Overlay) -> Dimensions) : this(name, DynamicOverlay(configName, renderFunc), desc)
 
     init {
         OverlayManager.register(overlay)

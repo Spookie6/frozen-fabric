@@ -21,6 +21,7 @@ object Wardrobe : Module(
     val keyNine by KeybindSetting("Slot 9", GLFW.GLFW_KEY_9).onPress { this.onPress(44) }
 
     fun onPress(slot: Int) {
+        ChatUtil.sendModInfo("Wd kb pressed!")
         val screen = Frozen.mc.screen ?: return
         ChatUtil.sendModInfo(screen::class.java.name)
     }

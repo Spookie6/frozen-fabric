@@ -4,6 +4,7 @@ import dev.frozencloud.frozen.Frozen
 import dev.frozencloud.frozen.config.ModulesConfig
 import dev.frozencloud.frozen.events.impl.InputEvent
 import dev.frozencloud.frozen.events.impl.TickEvent
+import dev.frozencloud.frozen.features.impl.general.AutoSprint
 import dev.frozencloud.frozen.features.impl.general.Wardrobe
 import dev.frozencloud.frozen.features.impl.rendering.Interface
 import dev.frozencloud.frozen.features.impl.test.EtherWarp
@@ -35,7 +36,7 @@ object ModuleManager {
 
     init {
         registerModules(ModulesConfig(file = File(Frozen.configFile, "config.json")),
-            Interface, TickTimers, EtherWarp, Wardrobe
+            Interface, TickTimers, EtherWarp, Wardrobe, AutoSprint
         )
     }
 
