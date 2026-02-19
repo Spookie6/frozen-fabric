@@ -3,6 +3,7 @@ package dev.frozencloud.frozen.ui
 import dev.frozencloud.frozen.Frozen
 import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.ui.components.ModMenuButtonComponent
+import dev.frozencloud.frozen.util.ChatUtil
 import dev.frozencloud.frozen.util.getStandardGuiScale
 import dev.frozencloud.frozen.util.render.Colors
 import dev.frozencloud.frozen.util.ui.animations.EaseOutAnimation
@@ -78,10 +79,11 @@ object ModMenu : Screen(Component.literal("ModMenu")) {
 
     private enum class MenuButtons(val action: () -> Unit) {
         Config({ ConfigScreen.open() }),
-        Waypoints({ WaypointEditor.open() }),
+//        Waypoints({ WaypointEditor.open() }),
+        Waypoints({ mc.setScreen(null); ChatUtil.sendModInfo("Will be added later <3") }),
         Keybinds({ mc.setScreen(null) }),
-        Aliases({ mc.setScreen(null) }),
-        Notifications({ mc.setScreen(null) }),
+        Aliases({ mc.setScreen(null); ChatUtil.sendModInfo("Will be added later <3") }),
+        Notifications({ mc.setScreen(null); ChatUtil.sendModInfo("Will be added later <3") }),
         Overlays({ OverlayEditor.open() }),
     }
 }

@@ -1,7 +1,6 @@
 package dev.frozencloud.frozen.ui.components
 
 import dev.frozencloud.frozen.ui.ConfigScreen
-import dev.frozencloud.frozen.ui.WaypointEditor
 import dev.frozencloud.frozen.util.getStandardGuiScale
 import dev.frozencloud.frozen.util.next
 import dev.frozencloud.frozen.util.render.Color.Companion.darker

@@ -34,7 +34,7 @@ object WaypointEditor : Screen(Component.literal("Waypoint Editor")) {
         else mc.setScreen(this)
     }
 
-override fun onClose() {
+    override fun onClose() {
         super.onClose()
         WaypointConfig.save()
     }
@@ -62,5 +62,4 @@ override fun onClose() {
 
         return super.mouseClicked(mouseButtonEvent, bl)
     }
-
 }

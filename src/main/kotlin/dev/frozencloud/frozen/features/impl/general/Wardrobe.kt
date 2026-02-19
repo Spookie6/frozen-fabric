@@ -1,28 +1,57 @@
 package dev.frozencloud.frozen.features.impl.general
 
 import dev.frozencloud.frozen.Frozen
+import dev.frozencloud.frozen.events.impl.ScreenEvent
 import dev.frozencloud.frozen.features.Module
+import dev.frozencloud.frozen.ui.settings.impl.BooleanSetting
 import dev.frozencloud.frozen.ui.settings.impl.KeybindSetting
-import dev.frozencloud.frozen.util.ChatUtil
+import meteordevelopment.orbit.EventHandler
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.ClickType
 import org.lwjgl.glfw.GLFW
 
 object Wardrobe : Module(
     name = "Wardrobe keybinds",
     description = "Allows you to navigate the wardrobe with keybinds"
 ) {
-    val keyOne by KeybindSetting("Slot 1", GLFW.GLFW_KEY_1).onPress { this.onPress(36) }
-    val keyTwo by KeybindSetting("Slot 2", GLFW.GLFW_KEY_2).onPress { this.onPress(37) }
-    val keyThree by KeybindSetting("Slot 3", GLFW.GLFW_KEY_3).onPress { this.onPress(38) }
-    val keyFour by KeybindSetting("Slot 4", GLFW.GLFW_KEY_4).onPress { this.onPress(39) }
-    val keyFive by KeybindSetting("Slot 5", GLFW.GLFW_KEY_5).onPress { this.onPress(40) }
-    val keySix by KeybindSetting("Slot 6", GLFW.GLFW_KEY_6).onPress { this.onPress(41) }
-    val keySeven by KeybindSetting("Slot 7", GLFW.GLFW_KEY_7).onPress { this.onPress(42) }
-    val keyEight by KeybindSetting("Slot 8", GLFW.GLFW_KEY_8).onPress { this.onPress(43) }
-    val keyNine by KeybindSetting("Slot 9", GLFW.GLFW_KEY_9).onPress { this.onPress(44) }
+    val preventUnequip by BooleanSetting("Prevent unequip", desc = "Prevents you from unequipping in wardrobe.")
+    val keyOne by KeybindSetting("Slot 1", GLFW.GLFW_KEY_1)
+    val keyTwo by KeybindSetting("Slot 2", GLFW.GLFW_KEY_2)
+    val keyThree by KeybindSetting("Slot 3", GLFW.GLFW_KEY_3)
+    val keyFour by KeybindSetting("Slot 4", GLFW.GLFW_KEY_4)
+    val keyFive by KeybindSetting("Slot 5", GLFW.GLFW_KEY_5)
+    val keySix by KeybindSetting("Slot 6", GLFW.GLFW_KEY_6)
+    val keySeven by KeybindSetting("Slot 7", GLFW.GLFW_KEY_7)
+    val keyEight by KeybindSetting("Slot 8", GLFW.GLFW_KEY_8)
+    val keyNine by KeybindSetting("Slot 9", GLFW.GLFW_KEY_9)
 
-    fun onPress(slot: Int) {
-        ChatUtil.sendModInfo("Wd kb pressed!")
-        val screen = Frozen.mc.screen ?: return
-        ChatUtil.sendModInfo(screen::class.java.name)
+    val keyMap = mapOf(keyOne to 36, keyTwo to 37, keyThree to 38, keyFour to 39, keyFive to 40, keySix to 41, keySeven to 42, keyEight to 43, keyNine to 44)
+
+    @EventHandler
+    fun onScreenKeyPressed(event: ScreenEvent.KeyTyped) {
+        if (this.handle(event.key)) event.cancel()
+    }
+
+    @EventHandler
+    fun onScreenMouseClicked(event: ScreenEvent.MouseClicked) {
+        if (this.handle(event.click)) event.cancel()
+    }
+
+    fun handle(key: Int): Boolean {
+        val screen = (Frozen.mc.screen ?: return false) as? AbstractContainerScreen<*> ?: return false
+        val menu = screen.menu
+
+        val title = screen.title.string
+        if (!title.startsWith("Wardrobe")) return false
+
+        val slot = keyMap[keyMap.keys.find { it.value == key }] ?: return false
+
+        val equippedSlot = menu.slots.find { it.item.hoverName.string.contains("Equipped") }?.index
+        if (preventUnequip && equippedSlot == slot) return false
+
+
+        mc.gameMode?.handleInventoryMouseClick(menu.containerId, slot, 0, ClickType.PICKUP, mc.player as Player)
+        return true
     }
 }

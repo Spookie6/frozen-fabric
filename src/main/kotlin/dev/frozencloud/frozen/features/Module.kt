@@ -3,6 +3,10 @@ package dev.frozencloud.frozen.features
 import dev.frozencloud.frozen.ui.settings.Setting
 import dev.frozencloud.frozen.Frozen
 import dev.frozencloud.frozen.ui.settings.RenderableSetting
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap
+import net.minecraft.network.HashedStack
+import net.minecraft.network.protocol.Packet
+import net.minecraft.world.inventory.ClickType
 import org.lwjgl.glfw.GLFW
 
 abstract class Module(

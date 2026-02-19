@@ -7,10 +7,14 @@ import dev.frozencloud.frozen.config.SlotbindingConfig
 import dev.frozencloud.frozen.config.WaypointConfig
 import dev.frozencloud.frozen.events.EventDispatcher
 import dev.frozencloud.frozen.events.impl.TickEvent
+import dev.frozencloud.frozen.events.impl.WorldRenderEvent
 import dev.frozencloud.frozen.features.ModuleManager
 import dev.frozencloud.frozen.util.Scheduler
 import dev.frozencloud.frozen.util.overlay.OverlayManager
+import dev.frozencloud.frozen.util.render.Colors
 import dev.frozencloud.frozen.util.render.RenderBatchManager
+import dev.frozencloud.frozen.util.render.drawOutlinedBox
+import dev.frozencloud.frozen.util.render.renderBoundingBox
 import dev.frozencloud.frozen.util.skyblock.LocationUtil
 import dev.frozencloud.frozen.util.skyblock.kuudra.KuudraUtil
 import dev.frozencloud.frozen.util.ui.rendering.NanoVGSpecials
@@ -24,6 +28,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.SpecialGuiElementRegistry
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.core.BlockPos
+import net.minecraft.world.phys.AABB
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -111,6 +117,11 @@ object Frozen : ClientModInitializer {
             KuudraUtil
         )
         modules.forEach(EVENT_BUS::subscribe)
+    }
+
+    @EventHandler
+    fun onWorldRenderExtract(event: WorldRenderEvent.Extract) {
+        event.drawOutlinedBox(AABB(BlockPos(0, 0, 0)), Colors.GlacialAccent)
     }
 
     @EventHandler

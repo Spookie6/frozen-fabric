@@ -54,3 +54,5 @@ fun Giant.getCratePos(): Vec3 {
     val z = this.position().z + 0.5 + (3.7 * sin(Math.toRadians((yaw + 130))));
     return Vec3(x, 75.0, z);
 }
+
+operator fun Vec3.unaryMinus(): Vec3 = Vec3(-x, -y, -z)
