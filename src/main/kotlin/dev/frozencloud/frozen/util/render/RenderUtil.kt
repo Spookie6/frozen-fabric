@@ -1,7 +1,5 @@
 package dev.frozencloud.frozen.util.render
 
-import com.mojang.blaze3d.vertex.BufferBuilder
-import com.mojang.blaze3d.vertex.ByteBufferBuilder
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.frozencloud.frozen.Frozen.mc
@@ -12,9 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import meteordevelopment.orbit.EventHandler
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.MappableRingBuffer
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.AABB
@@ -28,11 +24,6 @@ internal data class LineData(val from: Vec3, val to: Vec3, val color: Int, val t
 internal data class BoxData(val aabb: AABB, val r: Float, val g: Float, val b: Float, val a: Float, val thickness: Float)
 internal data class BeaconData(val pos: Vec3, val color: Color, val isScoping: Boolean, val gameTime: Long)
 internal data class TextData(val text: String, val pos: Vec3, val scale: Float, val phase: PhaseType, val cameraRotation: org.joml.Quaternionf, val font: Font, val textWidth: Float)
-
-private val allocator: ByteBufferBuilder = ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE)
-
-private var buffer: BufferBuilder? = null
-private var vertexBuffer: MappableRingBuffer? = null
 
 inline val Entity.renderX: Double
     get() =
@@ -53,7 +44,7 @@ inline val Entity.renderBoundingBox: AABB
     get() = boundingBox.move(renderX - x, renderY - y, renderZ - z)
 
 enum class PhaseType() {
-    PHASE, NO_PHASE;
+    NO_PHASE, PHASE;
 }
 
 enum class BoxStyle {
@@ -203,8 +194,7 @@ private fun PoseStack.renderBatchedTexts(consumer: List<TextData>, bufferSource:
     }
 }
 
-
-fun WorldRenderEvent.Extract.drawLine(points: Collection<Vec3>, color: Color, thickness: Float = 2.5f, phase: PhaseType = PhaseType.PHASE) {
+fun WorldRenderEvent.Extract.drawLine(points: Collection<Vec3>, color: Color, thickness: Float = 2.5f, phase: PhaseType = PhaseType.NO_PHASE) {
     val batch = RenderConsumer.lines[phase.ordinal]
 
     val iterator = points.iterator()
@@ -217,7 +207,7 @@ fun WorldRenderEvent.Extract.drawLine(points: Collection<Vec3>, color: Color, th
     }
 }
 
-fun WorldRenderEvent.Extract.drawTracer(to: Vec3, color: Color, thickness: Float, phase: PhaseType = PhaseType.PHASE) {
+fun WorldRenderEvent.Extract.drawTracer(to: Vec3, color: Color, thickness: Float, phase: PhaseType = PhaseType.NO_PHASE) {
     val from = mc.player?.let {
         it.renderPos.add(it.forward.add(0.0, it.eyeHeight.toDouble(), 0.0))
     } ?: return
@@ -225,19 +215,19 @@ fun WorldRenderEvent.Extract.drawTracer(to: Vec3, color: Color, thickness: Float
     drawLine(listOf(from, to), color, thickness, phase)
 }
 
-fun WorldRenderEvent.Extract.drawFilledBox(aabb: AABB, color: Color, thickness: Float = 3f, phase: PhaseType = PhaseType.PHASE) {
+fun WorldRenderEvent.Extract.drawFilledBox(aabb: AABB, color: Color, thickness: Float = 3f, phase: PhaseType = PhaseType.NO_PHASE) {
     RenderConsumer.filledBoxes[phase.ordinal].add(
         BoxData(aabb, color.redFloat, color.greenFloat, color.blueFloat, color.alphaFloat, thickness)
     )
 }
 
-fun WorldRenderEvent.Extract.drawOutlinedBox(aabb: AABB, color: Color, thickness: Float = 3f, phase: PhaseType = PhaseType.PHASE) {
+fun WorldRenderEvent.Extract.drawOutlinedBox(aabb: AABB, color: Color, thickness: Float = 3f, phase: PhaseType = PhaseType.NO_PHASE) {
     RenderConsumer.wireFrames[phase.ordinal].add(
         BoxData(aabb, color.redFloat, color.greenFloat, color.blueFloat, color.alphaFloat, thickness)
     )
 }
 
-fun WorldRenderEvent.Extract.drawStyledBox(aabb: AABB, color: Color, style: BoxStyle, phase: PhaseType = PhaseType.PHASE) {
+fun WorldRenderEvent.Extract.drawStyledBox(aabb: AABB, color: Color, style: BoxStyle, phase: PhaseType = PhaseType.NO_PHASE) {
     when (style) {
         BoxStyle.OUTLINED -> drawOutlinedBox(aabb, color, phase = phase)
         BoxStyle.FILLED -> drawFilledBox(aabb, color, phase = phase)
@@ -255,7 +245,7 @@ fun WorldRenderEvent.Extract.drawBeaconBeam(pos: Vec3, color: Color) {
     RenderConsumer.beacons.add(BeaconData(pos, color, isScoping, gameTime))
 }
 
-fun WorldRenderEvent.Extract.drawString(content: String, pos: Vec3, scale: Float, phase: PhaseType = PhaseType.PHASE) {
+fun WorldRenderEvent.Extract.drawString(content: String, pos: Vec3, scale: Float, phase: PhaseType = PhaseType.NO_PHASE) {
     val cameraRotation = mc.gameRenderer.mainCamera.rotation()
     val font = mc.font ?: return
     val textWidth = font.width(content).toFloat()
@@ -264,7 +254,6 @@ fun WorldRenderEvent.Extract.drawString(content: String, pos: Vec3, scale: Float
 }
 
 object PrimitiveRenderer {
-
     private val edges = intArrayOf(
         0, 1,  1, 5,  5, 4,  4, 0,
         3, 2,  2, 6,  6, 7,  7, 3,

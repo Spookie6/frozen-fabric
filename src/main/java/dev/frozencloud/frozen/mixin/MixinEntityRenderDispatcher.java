@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
     Stops entity death rendering
  */
 @Mixin(EntityRenderDispatcher.class)
-public class MixinEntityRenderDispatcher {
+public class MixinEntityRenderDispatcher<T extends Entity> {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
-    private <E extends Entity> void onShouldRender(E entity, Frustum frustum, double d, double e, double f, CallbackInfoReturnable<Boolean> cir) {
+    private void onShouldRender(T entity, Frustum frustum, double d, double e, double f, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() <= 0) cir.setReturnValue(false);
     }
 }

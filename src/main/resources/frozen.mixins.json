@@ -12,6 +12,7 @@
     "MixinAbstractContainerScreen",
     "MixinAbstractSignEditScreen",
     "MixinClientLevel",
+    "MixinClientPacketListener",
     "MixinConnection",
     "MixinEffectsInInventory",
     "MixinEntityRenderDispatcher",
@@ -25,10 +26,9 @@
     "MixinPerspective",
     "MixinScreen",
     "MixinScreenEffectRenderer",
+    "MixinShovelItem",
+    "MixinEntity",
     "accessors.AccessorBeaconBeam",
     "accessors.AccessorClientLevel"
-  ],
-  "mixins": [
-    "MixinShovelItem"
   ]
 }

@@ -4,7 +4,6 @@ import dev.frozencloud.frozen.util.render.CustomRenderPipelines
 import net.irisshaders.iris.api.v0.*
 
 object IrisCompatibility {
-
     fun init() {
         IrisApi.getInstance().apply {
             assignPipeline(CustomRenderPipelines.LINE_LIST, IrisProgram.LINES)

@@ -45,7 +45,7 @@ fun Vec3.getYaw(): Double {
 inline val Entity.yaw: Double get() = this.lookAngle.getYaw()
 inline val Entity.pitch: Double get() = this.lookAngle.getPitch()
 
-fun Giant.getCratePos(): Vec3 {
+inline val Giant.cratePos: Vec3 get() {
     val dx = this.lookAngle.x
     val dz = this.lookAngle.z
 
