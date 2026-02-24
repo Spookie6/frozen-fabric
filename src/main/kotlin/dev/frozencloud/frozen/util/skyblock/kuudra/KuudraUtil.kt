@@ -23,7 +23,7 @@ import net.minecraft.world.entity.monster.Giant
 import net.minecraft.world.entity.monster.MagmaCube
 
 object KuudraUtil {
-    inline val inKuudra: Boolean get() = LocationUtil.currentIsland.isArea(Island.Kuudra)
+    inline val inKuudra: Boolean get() = currentIsland.isArea(Island.Kuudra)
 
     private val tierRegex = Regex("Kuudra's Hollow \\(T(\\d)\\)$")
     private val freshRegex = Regex("^Party > (\\[[^]]*?])? ?(\\w{1,16}): FRESH!*( *\\(\\d+%\\))*$")
@@ -42,13 +42,13 @@ object KuudraUtil {
         private set
 
     val crates = mutableListOf<Giant>()
-//    val buildPiles = mutableListOf<>()
 
     init {
         Scheduler.addTask(10, false, { inKuudra && mc.level != null && mc.player != null }, true) {
-            ChatUtil.sendModInfo("yaw ${mc.player!!.yaw}, pitch: ${mc.player!!.pitch}")
-
             val entities = mc.level?.entitiesForRendering() ?: return@addTask
+
+            crates.clear()
+            kuudraEntity = null
 
             entities.forEach { entity ->
                 when (entity) {

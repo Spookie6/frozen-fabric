@@ -5,8 +5,10 @@ import dev.frozencloud.frozen.config.ModulesConfig
 import dev.frozencloud.frozen.events.impl.InputEvent
 import dev.frozencloud.frozen.events.impl.TickEvent
 import dev.frozencloud.frozen.features.impl.general.AutoSprint
+import dev.frozencloud.frozen.features.impl.general.SpiritualyDisplay
 import dev.frozencloud.frozen.features.impl.general.Wardrobe
 import dev.frozencloud.frozen.features.impl.kuudra.CrateHitboxes
+import dev.frozencloud.frozen.features.impl.kuudra.TeamHighlight
 import dev.frozencloud.frozen.features.impl.rendering.Interface
 import dev.frozencloud.frozen.features.impl.test.EtherWarp
 import dev.frozencloud.frozen.features.impl.test.TickTimers
@@ -37,7 +39,7 @@ object ModuleManager {
 
     init {
         registerModules(ModulesConfig(file = File(Frozen.configFile, "config.json")),
-            Interface, TickTimers, EtherWarp, Wardrobe, AutoSprint, CrateHitboxes
+            Interface, TickTimers, EtherWarp, Wardrobe, AutoSprint, CrateHitboxes, TeamHighlight, SpiritualyDisplay
         )
     }
 

@@ -2,7 +2,6 @@ package dev.frozencloud.frozen.util.overlay
 
 import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.features.impl.rendering.Interface
-import dev.frozencloud.frozen.util.render.Color
 import dev.frozencloud.frozen.util.skyblock.Island
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.gui.GuiGraphics

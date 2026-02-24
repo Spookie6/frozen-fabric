@@ -32,6 +32,7 @@ class SelectorSetting(
     private var index: Int = optionIndex(default)
         set(value) {
             field = if (value > options.size -1) 0 else if (value < 0) options.size - 1 else value
+            this.value = selected
         }
 
     private var selected: String

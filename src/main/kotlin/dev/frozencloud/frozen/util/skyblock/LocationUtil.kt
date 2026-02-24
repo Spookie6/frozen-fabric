@@ -4,7 +4,9 @@ import dev.frozencloud.frozen.Frozen.mc
 import dev.frozencloud.frozen.events.impl.PacketEvent
 import dev.frozencloud.frozen.events.impl.WorldEvent
 import meteordevelopment.orbit.EventHandler
+import net.minecraft.network.protocol.common.ClientboundPingPacket
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket
 import net.minecraft.network.protocol.game.ClientboundSetObjectivePacket
 
 // TODO("Update current region with region from the scoreboard")

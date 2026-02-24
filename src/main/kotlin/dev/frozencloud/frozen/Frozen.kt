@@ -9,13 +9,16 @@ import dev.frozencloud.frozen.events.EventDispatcher
 import dev.frozencloud.frozen.events.impl.TickEvent
 import dev.frozencloud.frozen.events.impl.WorldRenderEvent
 import dev.frozencloud.frozen.features.ModuleManager
+import dev.frozencloud.frozen.util.ChatUtil
 import dev.frozencloud.frozen.util.Scheduler
 import dev.frozencloud.frozen.util.overlay.OverlayManager
+import dev.frozencloud.frozen.util.pitch
 import dev.frozencloud.frozen.util.render.*
 import dev.frozencloud.frozen.util.render.EntityOutlineRenderer.setGlow
 import dev.frozencloud.frozen.util.skyblock.LocationUtil
 import dev.frozencloud.frozen.util.skyblock.kuudra.KuudraUtil
 import dev.frozencloud.frozen.util.ui.rendering.NanoVGSpecials
+import dev.frozencloud.frozen.util.yaw
 import kotlinx.serialization.json.Json
 import meteordevelopment.orbit.EventBus
 import meteordevelopment.orbit.EventHandler
@@ -108,7 +111,7 @@ object Frozen : ClientModInitializer {
             modules,
             this,
             LocationUtil,
-             OverlayManager,
+            OverlayManager,
             ModuleManager,
             EventDispatcher,
             RenderBatchManager,
@@ -121,11 +124,7 @@ object Frozen : ClientModInitializer {
 
     @EventHandler
     fun onWorldRenderExtract(event: WorldRenderEvent.Extract) {
-        event.drawOutlinedBox(AABB(BlockPos(0, 0, 0)), Colors.GlacialAccent)
-
-        (mc.player ?: return).setGlow(Colors.MINECRAFT_AQUA)
-
-        event.drawBeaconBeam(Vec3(0.0, 0.0, 0.0), Colors.GlacialAccent)
+        mc.player?.setGlow(Colors.MINECRAFT_AQUA)
     }
 
     @EventHandler

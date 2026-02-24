@@ -1,6 +1,5 @@
 package dev.frozencloud.frozen.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.frozencloud.frozen.events.impl.PacketEvent;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;

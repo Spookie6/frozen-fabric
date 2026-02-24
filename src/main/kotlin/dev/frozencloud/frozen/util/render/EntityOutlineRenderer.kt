@@ -11,10 +11,6 @@ object EntityOutlineRenderer {
         entitiesToOutline[this] = color
     }
 
-    fun Entity.removeGlow() {
-        entitiesToOutline.remove(this)
-    }
-
     fun Entity.shouldGlow(): Boolean {
         return entitiesToOutline.keys.contains(this)
     }
@@ -22,11 +18,6 @@ object EntityOutlineRenderer {
     fun Entity.getGlowColor(): Int {
         return entitiesToOutline[this]?.rgba ?: Colors.WHITE.rgba
     }
-
-//    @EventHandler
-//    fun onClientTick(event: WorldEvent.Load) {
-//        entitiesToOutline.clear()
-//    }
 
     @EventHandler(priority = 100)
     fun onRenderWorldExtract(event: WorldRenderEvent.Extract) {

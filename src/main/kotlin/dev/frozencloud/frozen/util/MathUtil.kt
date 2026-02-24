@@ -4,10 +4,8 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.monster.Giant
 import net.minecraft.world.phys.Vec3
 import kotlin.math.PI
-import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.cosh
 import kotlin.math.sin
 import kotlin.math.sqrt
 
@@ -34,7 +32,7 @@ fun Vec3.getLookYawTo(other: Vec3): Float {
 
 fun Vec3.getPitch(): Double {
     val hori = sqrt(this.x * this.x + this.z * this.z)
-    return atan2(-this.y, hori)
+    return Math.toDegrees(atan2(-this.y, hori))
 }
 
 fun Vec3.getYaw(): Double {
@@ -45,13 +43,13 @@ fun Vec3.getYaw(): Double {
 inline val Entity.yaw: Double get() = this.lookAngle.getYaw()
 inline val Entity.pitch: Double get() = this.lookAngle.getPitch()
 
-inline val Giant.cratePos: Vec3 get() {
-    val dx = this.lookAngle.x
-    val dz = this.lookAngle.z
+fun Number.toFixed(decimals: Int): String {
+    return "%.${decimals}f".format(this)
+}
 
-    val yaw = Math.toDegrees(atan2(dx, dz))
-    val x = this.position().x + 0.5 + (3.7 * cos(Math.toRadians((yaw + 130))));
-    val z = this.position().z + 0.5 + (3.7 * sin(Math.toRadians((yaw + 130))));
+inline val Giant.cratePos: Vec3 get() {
+    val x = this.position().x + 0.5 + (4.2 * cos(Math.toRadians((yaw + 130))));
+    val z = this.position().z + 0.5 + (4.2 * sin(Math.toRadians((yaw + 130))));
     return Vec3(x, 75.0, z);
 }
 
