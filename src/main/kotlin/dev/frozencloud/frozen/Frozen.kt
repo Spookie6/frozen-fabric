@@ -9,16 +9,15 @@ import dev.frozencloud.frozen.events.EventDispatcher
 import dev.frozencloud.frozen.events.impl.TickEvent
 import dev.frozencloud.frozen.events.impl.WorldRenderEvent
 import dev.frozencloud.frozen.features.ModuleManager
-import dev.frozencloud.frozen.util.ChatUtil
 import dev.frozencloud.frozen.util.Scheduler
 import dev.frozencloud.frozen.util.overlay.OverlayManager
-import dev.frozencloud.frozen.util.pitch
-import dev.frozencloud.frozen.util.render.*
+import dev.frozencloud.frozen.util.render.Colors
+import dev.frozencloud.frozen.util.render.EntityOutlineRenderer
 import dev.frozencloud.frozen.util.render.EntityOutlineRenderer.setGlow
+import dev.frozencloud.frozen.util.render.RenderBatchManager
 import dev.frozencloud.frozen.util.skyblock.LocationUtil
 import dev.frozencloud.frozen.util.skyblock.kuudra.KuudraUtil
 import dev.frozencloud.frozen.util.ui.rendering.NanoVGSpecials
-import dev.frozencloud.frozen.util.yaw
 import kotlinx.serialization.json.Json
 import meteordevelopment.orbit.EventBus
 import meteordevelopment.orbit.EventHandler
@@ -29,9 +28,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.SpecialGuiElementRegistry
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.core.BlockPos
-import net.minecraft.world.phys.AABB
-import net.minecraft.world.phys.Vec3
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -46,7 +42,7 @@ object Frozen : ClientModInitializer {
     val logger: Logger = LoggerFactory.getLogger("frozen")
 
     @JvmStatic
-    val mc: Minecraft = Minecraft.getInstance()
+    val mc: Minecraft by lazy { Minecraft.getInstance() }
 
     @JvmStatic
     val EVENT_BUS: IEventBus = EventBus()

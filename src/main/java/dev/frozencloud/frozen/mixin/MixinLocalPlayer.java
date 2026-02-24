@@ -15,9 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(LocalPlayer.class)
 public abstract class MixinLocalPlayer {
     @Shadow
-    public abstract void aiStep();
-
-    @Shadow
     public ClientInput input;
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Input;sprint()Z"))
