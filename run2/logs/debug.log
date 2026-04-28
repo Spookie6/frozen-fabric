@@ -207,7 +207,7 @@
 [22:32:15] [main/DEBUG] (FabricLoader/Entrypoint) Registering new-style initializer net.fabricmc.fabric.impl.client.model.loading.CustomUnbakedBlockStateModelInit for mod fabric-model-loading-api-v1 (key client)
 [22:32:15] [main/DEBUG] (FabricLoader/Entrypoint) Registering new-style initializer net.fabricmc.fabric.impl.client.event.lifecycle.ClientLifecycleEventsImpl for mod fabric-lifecycle-events-v1 (key client)
 [22:32:15] [main/DEBUG] (FabricLoader/Entrypoint) Registering new-style initializer net.fabricmc.fabric.impl.event.lifecycle.LifecycleEventsImpl for mod fabric-lifecycle-events-v1 (key main)
-[22:32:15] [main/DEBUG] (FabricLoader/Entrypoint) Registering new-style initializer dev.frozencloud.frozen.Frozen for mod frozen (key client)
+[22:32:15] [main/DEBUG] (FabricLoader/Entrypoint) Registering new-style initializer dev.frozencloud.infernum.Frozen for mod frozen (key client)
 [22:32:15] [main/DEBUG] (FabricLoader/Entrypoint) Registering new-style initializer net.fabricmc.fabric.impl.resource.conditions.ResourceConditionsImpl for mod fabric-resource-conditions-api-v1 (key main)
 [22:32:15] [main/DEBUG] (FabricLoader/Entrypoint) Registering new-style initializer dev.tr7zw.trender.gui.impl.modmenu.ModMenuSupport for mod trender (key modmenu)
 [22:32:15] [main/DEBUG] (FabricLoader/Entrypoint) Registering new-style initializer dev.tr7zw.trender.gui.impl.client.LibGuiClient for mod trender (key client)

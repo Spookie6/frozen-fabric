@@ -4,7 +4,7 @@
 Time: 2026-01-21 22:48:09
 Description: Initializing game
 
-java.lang.RuntimeException: Could not execute entrypoint stage 'main' due to errors, provided by 'frozen' at 'dev.frozencloud.frozen.Frozen'!
+java.lang.RuntimeException: Could not execute entrypoint stage 'main' due to errors, provided by 'frozen' at 'dev.frozencloud.infernum.Frozen'!
 	at net.fabricmc.loader.impl.FabricLoaderImpl.lambda$invokeEntrypoints$0(FabricLoaderImpl.java:409)
 	at net.fabricmc.loader.impl.util.ExceptionUtil.gatherExceptions(ExceptionUtil.java:33)
 	at net.fabricmc.loader.impl.FabricLoaderImpl.invokeEntrypoints(FabricLoaderImpl.java:407)
@@ -19,7 +19,7 @@ Caused by: net.fabricmc.loader.api.EntrypointException: Exception while loading 
 	at net.fabricmc.loader.impl.entrypoint.EntrypointContainerImpl.getEntrypoint(EntrypointContainerImpl.java:56)
 	at net.fabricmc.loader.impl.FabricLoaderImpl.invokeEntrypoints(FabricLoaderImpl.java:405)
 	... 7 more
-Caused by: net.fabricmc.loader.api.LanguageAdapterException: Class dev.frozencloud.frozen.Frozen cannot be cast to net.fabricmc.api.ModInitializer!
+Caused by: net.fabricmc.loader.api.LanguageAdapterException: Class dev.frozencloud.infernum.Frozen cannot be cast to net.fabricmc.api.ModInitializer!
 	at knot//net.fabricmc.language.kotlin.KotlinAdapter.create(KotlinAdapter.kt:58)
 	at net.fabricmc.loader.impl.entrypoint.EntrypointStorage$NewEntry.getOrCreate(EntrypointStorage.java:124)
 	at net.fabricmc.loader.impl.entrypoint.EntrypointContainerImpl.getEntrypoint(EntrypointContainerImpl.java:53)

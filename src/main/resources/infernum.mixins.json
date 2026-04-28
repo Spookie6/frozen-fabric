@@ -1,0 +1,32 @@
+{
+  "required": true,
+  "package": "dev.frozencloud.infernum.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "MixinAbstractContainerScreen",
+    "MixinAbstractSignEditScreen",
+    "MixinClientLevel",
+    "MixinClientPacketListener",
+    "MixinConnection",
+    "MixinEffectsInInventory",
+    "MixinEntityRenderDispatcher",
+    "MixinKeyMapping",
+    "MixinLocalPlayer",
+    "MixinMinecraft",
+    "MixinMobEffectInstance",
+    "MixinMouseHandler",
+    "MixinPerspective",
+    "MixinScreen",
+    "MixinScreenEffectRenderer",
+    "MixinShovelItem",
+    "MixinEntity",
+    "accessors.AccessorBeaconBeam",
+    "accessors.AccessorClientLevel"
+  ]
+}

@@ -1,0 +1,104 @@
+package dev.frozencloud.infernum.features
+
+import dev.frozencloud.infernum.Infernum
+import dev.frozencloud.infernum.config.ModulesConfig
+import dev.frozencloud.infernum.events.impl.InputEvent
+import dev.frozencloud.infernum.events.impl.TickEvent
+import dev.frozencloud.infernum.features.impl.general.AutoSprint
+import dev.frozencloud.infernum.features.impl.general.Wardrobe
+import dev.frozencloud.infernum.features.impl.kuudra.CrateHitboxes
+import dev.frozencloud.infernum.features.impl.kuudra.CratePrio
+import dev.frozencloud.infernum.features.impl.kuudra.PearlTrajectory
+import dev.frozencloud.infernum.features.impl.kuudra.PreSpot
+import dev.frozencloud.infernum.features.impl.kuudra.SupplyPiles
+import dev.frozencloud.infernum.features.impl.kuudra.TeamHighlight
+import dev.frozencloud.infernum.features.impl.misc.NoScroll
+import dev.frozencloud.infernum.features.impl.misc.NoSelfie
+import dev.frozencloud.infernum.features.impl.rendering.Interface
+import dev.frozencloud.infernum.features.impl.rendering.Notifications
+import dev.frozencloud.infernum.features.impl.test.EtherWarp
+import dev.frozencloud.infernum.ui.settings.impl.KeybindSetting
+import dev.frozencloud.infernum.ui.settings.impl.OverlaySetting
+import it.unimi.dsi.fastutil.objects.ObjectArrayList
+import meteordevelopment.orbit.EventHandler
+import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.network.protocol.Packet
+import java.io.File
+import java.util.concurrent.CopyOnWriteArrayList
+
+object ModuleManager {
+    data class PacketFunction<T : Packet<*>>(val type: Class<T>, val shouldRun: () -> Boolean, val function: (T) -> Unit)
+    data class MessageFunction(val filter: Regex, val shouldRun: () -> Boolean, val function: (MatchResult) -> Unit)
+    data class TickTask(var ticksLeft: Int, val server: Boolean, val function: () -> Unit)
+
+    val packetFunctions = arrayListOf<PacketFunction<Packet<*>>>()
+    val messageFunctions = arrayListOf<MessageFunction>()
+    val worldLoadFunctions = arrayListOf<() -> Unit>()
+    val tickTasks = CopyOnWriteArrayList<TickTask>()
+
+    val modules: HashMap<String, Module> = linkedMapOf()
+    val modulesByCategory: HashMap<Category, ArrayList<Module>> = hashMapOf()
+
+    val configs: ArrayList<ModulesConfig> = arrayListOf()
+
+    val keySettingsCache = ObjectArrayList<KeybindSetting>()
+
+    init {
+        registerModules(ModulesConfig(file = File(Infernum.configFile, "config.json")),
+            Interface, EtherWarp, Wardrobe, AutoSprint, NoScroll, Notifications, NoSelfie,
+
+//            Kuudra
+            TeamHighlight, PearlTrajectory,
+            PreSpot, CrateHitboxes, SupplyPiles, CratePrio
+        )
+    }
+
+    fun registerModules(config: ModulesConfig, vararg modules: Module) {
+        modules.forEach { module ->
+            if (module.devOnly && !FabricLoader.getInstance().isDevelopmentEnvironment) return@forEach
+            val lowercase = module.name.lowercase()
+            config.modules[lowercase] = module
+            this.modules[lowercase] = module
+            this.modulesByCategory.getOrPut(module.category) { arrayListOf() }.add(module)
+
+            module.settings.values.filter { it is KeybindSetting }.forEach { keySettingsCache.add(it as KeybindSetting) }
+            module.settings.values.filter { it is OverlaySetting }.forEach { (it as OverlaySetting).overlay.addDependency { module.enabled } }
+        }
+
+        configs.add(config)
+        config.load()
+    }
+
+    fun loadConfigurations() {
+        for (config in configs) config.load()
+    }
+
+    fun saveConfigurations() {
+        for (config in configs) config.save()
+    }
+
+    @EventHandler
+    fun onInput(event: InputEvent) {
+        keySettingsCache.forEach {
+            if (it.value.value == event.key.value) it.onPress?.invoke()
+        }
+    }
+
+    @EventHandler
+    fun onTick(event: TickEvent.Client) {
+        if (event.phase != TickEvent.PHASE.START) return
+        tickTaskTick()
+    }
+
+    private fun tickTaskTick(server: Boolean = false) {
+        tickTasks.removeIf { tickTask ->
+            if (tickTask.server != server) return@removeIf false
+            if (tickTask.ticksLeft <= 0) {
+                runCatching { tickTask.function() }
+                return@removeIf true
+            }
+            tickTask.ticksLeft--
+            false
+        }
+    }
+}
