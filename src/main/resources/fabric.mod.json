@@ -12,7 +12,7 @@
 		"sources": "https://github.com/spookie6/frozen-fabric"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/infernum/icon.png",
+	"icon": "assets/infernum/infernum-icon.png",
 	"environment": "client",
 	"entrypoints": {
 		"client": [
@@ -20,7 +20,13 @@
 				"value": "dev.frozencloud.infernum.Infernum",
 				"adapter": "kotlin"
 			}
-		]
+		],
+        "modmenu": [
+          {
+            "adapter": "kotlin",
+            "value": "dev.frozencloud.infernum.compat.ModMenuCompat"
+          }
+        ]
 	},
 	"mixins": [
       "infernum.mixins.json"

@@ -8,6 +8,7 @@ import dev.frozencloud.infernum.features.impl.kuudra.CratePrio
 import dev.frozencloud.infernum.util.ChatUtil
 import dev.frozencloud.infernum.util.Scheduler
 import dev.frozencloud.infernum.util.TimeStamp
+import dev.frozencloud.infernum.util.isCrate
 import dev.frozencloud.infernum.util.network.AccountInfo
 import dev.frozencloud.infernum.util.skyblock.Island
 import dev.frozencloud.infernum.util.skyblock.LocationUtil.currentIsland
@@ -59,11 +60,11 @@ object KuudraUtil {
             entities.forEach { entity ->
                 when (entity) {
                     is Giant -> {
-                        if (entity.mainHandItem?.hoverName?.string?.endsWith("Head") == true) {
+                        if (entity.isCrate) {
                             crates.add(entity)
                             if (!cratesSpawned) {
                                 cratesSpawned = true
-                                Scheduler.addTask(30, this::onCrateSpawned)
+                                Scheduler.addTask(10, this::onCrateSpawned)
                             }
                         }
                     }
@@ -110,9 +111,6 @@ object KuudraUtil {
         val cratesToCheck = listOf(preSpot!!.crate, if (preSpot != PreSpot.Equals) preSpot!!.second else null)
         cratesToCheck.forEach { crate ->
             if (!crates.any { crate?.spawnRegion?.containsEntity(it) == true }) missing = crate
-            if (CratePrio.announceMissing) {
-                ChatUtil.sendParty(missing?.msg ?: return@forEach)
-            }
         }
         CratePrio.onMissingCrateDetected()
     }

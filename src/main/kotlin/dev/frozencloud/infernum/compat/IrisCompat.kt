@@ -3,7 +3,7 @@ package dev.frozencloud.infernum.compat
 import dev.frozencloud.infernum.util.render.CustomRenderPipelines
 import net.irisshaders.iris.api.v0.*
 
-object IrisCompatibility {
+object IrisCompat {
     fun init() {
         IrisApi.getInstance().apply {
             assignPipeline(CustomRenderPipelines.LINE_LIST, IrisProgram.LINES)

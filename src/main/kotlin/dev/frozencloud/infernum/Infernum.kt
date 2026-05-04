@@ -1,7 +1,7 @@
 package dev.frozencloud.infernum
 
 import dev.frozencloud.infernum.commands.impl.MainCommand
-import dev.frozencloud.infernum.compat.IrisCompatibility
+import dev.frozencloud.infernum.compat.IrisCompat
 import dev.frozencloud.infernum.config.KeyShortcutConfig
 import dev.frozencloud.infernum.config.SlotbindingConfig
 import dev.frozencloud.infernum.config.WaypointConfig
@@ -94,7 +94,7 @@ object Infernum : ClientModInitializer {
         }
 
         if (FabricLoader.getInstance().isModLoaded("iris")) {
-            IrisCompatibility.init()
+            IrisCompat.init()
         }
     }
 

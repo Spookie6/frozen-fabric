@@ -4,6 +4,7 @@ import dev.frozencloud.infernum.Infernum.mc
 import dev.frozencloud.infernum.util.ui.rendering.NanoVGHelper
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.entity.monster.Giant
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import kotlin.math.max
@@ -24,3 +25,6 @@ inline val ItemStack.customData: CompoundTag
 
 inline val ItemStack.skyblockId: String
     get() = customData.getString("id").orElse("")
+
+inline val Giant.isCrate: Boolean
+    get() = this.mainHandItem?.hoverName?.string?.endsWith("Head") == true

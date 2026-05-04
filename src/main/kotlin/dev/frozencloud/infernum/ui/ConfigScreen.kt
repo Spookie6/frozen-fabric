@@ -49,9 +49,9 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
     private val categoryButtons = Category.vals.map { CategoryButtonComponent(it) }
     private val moduleDropdownsByCategory = ModuleManager.modulesByCategory.mapValues { it.value.map { module -> ModuleDropdownComponent(module) } }
 
-    override fun renderBackground(guiGraphics: GuiGraphics, i: Int, j: Int, f: Float) {}
-
     override fun render(context: GuiGraphics, i: Int, j: Int, f: Float) {
+        super.renderBackground(context, i, j, f)
+
         context.fill(0, 0, context.guiWidth(), context.guiHeight(), Colors.Background.rgba)
 
         val scale = getStandardGuiScale()

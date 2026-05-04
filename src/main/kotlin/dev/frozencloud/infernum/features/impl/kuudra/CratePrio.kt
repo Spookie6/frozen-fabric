@@ -6,6 +6,7 @@ import dev.frozencloud.infernum.features.SubCategory
 import dev.frozencloud.infernum.features.impl.rendering.Notifications.notify
 import dev.frozencloud.infernum.ui.settings.impl.BooleanSetting
 import dev.frozencloud.infernum.ui.settings.impl.OverlaySetting
+import dev.frozencloud.infernum.util.ChatUtil
 import dev.frozencloud.infernum.util.overlay.TextOverlay
 import dev.frozencloud.infernum.util.skyblock.Island
 import dev.frozencloud.infernum.util.skyblock.kuudra.Crate
@@ -48,14 +49,16 @@ object CratePrio : Module(
         val pre = KuudraUtil.preSpot ?: return
         val missing = KuudraUtil.missing ?: return
 
-        prio = PRIO_TABLE[pre.ordinal][missing.ordinal]
-
         if (notify) {
+            prio = PRIO_TABLE[pre.ordinal][missing.ordinal]
+
             mc.player?.notify(
                 "§4✖ ${missing.name}",
                 "§b➜ ${prio!!.name}"
             )
         }
+
+        if (announceMissing) ChatUtil.sendParty(KuudraUtil.missing?.msg ?: return)
     }
 
     @EventHandler
