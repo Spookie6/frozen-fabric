@@ -52,8 +52,6 @@ object KuudraUtil {
         Scheduler.addTask(10, false, { inKuudra && mc.level != null && mc.player != null }, true) {
             val entities = mc.level?.entitiesForRendering() ?: return@addTask
 
-            println(phase)
-
             crates.clear()
             kuudraEntity = null
 
@@ -62,10 +60,7 @@ object KuudraUtil {
                     is Giant -> {
                         if (entity.isCrate) {
                             crates.add(entity)
-                            if (!cratesSpawned) {
-                                cratesSpawned = true
-                                Scheduler.addTask(10, this::onCrateSpawned)
-                            }
+                            if (!cratesSpawned) Scheduler.addTask(10, this::onCrateSpawned)
                         }
                     }
                     is MagmaCube -> {
@@ -105,14 +100,23 @@ object KuudraUtil {
     fun getPlayerPre(): PreSpot? = PreSpot.entries.firstOrNull { it.isClientNear }
 
     private fun onCrateSpawned() {
-        preSpot = getPlayerPre()
-        if (preSpot == null) return
+        cratesSpawned = true
 
-        val cratesToCheck = listOf(preSpot!!.crate, if (preSpot != PreSpot.Equals) preSpot!!.second else null)
-        cratesToCheck.forEach { crate ->
-            if (!crates.any { crate?.spawnRegion?.containsEntity(it) == true }) missing = crate
+        preSpot = getPlayerPre()
+        if (preSpot == null) {
+            ChatUtil.sendModInfo("Pre spot could not be determined, too far away?")
+            return
         }
-        CratePrio.onMissingCrateDetected()
+        ChatUtil.sendModInfo("Pre spot: $preSpot")
+
+        val cratesToCheck = listOfNotNull(preSpot!!.crate, if (preSpot != PreSpot.Equals) preSpot!!.second else null)
+        cratesToCheck.forEach { crate ->
+            if (!crates.any { crate.spawnRegion.containsEntity(it) }) {
+                missing = crate
+                CratePrio.onMissingCrateDetected()
+                return@forEach
+            }
+        }
     }
 
     @EventHandler
