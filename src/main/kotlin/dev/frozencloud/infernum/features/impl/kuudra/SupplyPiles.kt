@@ -13,6 +13,7 @@ import dev.frozencloud.infernum.util.render.drawLine
 import dev.frozencloud.infernum.util.render.drawOutlinedBox
 import dev.frozencloud.infernum.util.render.drawString
 import dev.frozencloud.infernum.util.skyblock.kuudra.KuudraUtil
+import dev.frozencloud.infernum.util.skyblock.kuudra.Phase
 import dev.frozencloud.infernum.util.skyblock.kuudra.SupplyPiles
 import meteordevelopment.orbit.EventHandler
 import net.minecraft.world.phys.AABB
@@ -34,9 +35,8 @@ object SupplyPiles : Module(
 
     @EventHandler
     fun onWorldExtract(event: WorldRenderEvent.Extract) {
-//        if (KuudraUtil.inKuudra || KuudraUtil.phase.ordinal >= Phase.BUILD.ordinal) return
+        if (KuudraUtil.inKuudra || KuudraUtil.phase.ordinal >= Phase.BUILD.ordinal) return
         SupplyPiles.entries.forEach {
-
             if (drawWaypoints) {
                 val color = when {
                     it.collected -> collectedColor

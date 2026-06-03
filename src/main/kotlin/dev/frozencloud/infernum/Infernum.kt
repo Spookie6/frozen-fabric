@@ -26,6 +26,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.SpecialGuiElementRegistry
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.world.entity.decoration.ArmorStand
+import net.minecraft.world.item.BoneMealItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File

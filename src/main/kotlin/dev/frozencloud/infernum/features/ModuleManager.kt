@@ -5,17 +5,23 @@ import dev.frozencloud.infernum.config.ModulesConfig
 import dev.frozencloud.infernum.events.impl.InputEvent
 import dev.frozencloud.infernum.events.impl.TickEvent
 import dev.frozencloud.infernum.features.impl.general.AutoSprint
+import dev.frozencloud.infernum.features.impl.general.Slotbinding
 import dev.frozencloud.infernum.features.impl.general.Wardrobe
 import dev.frozencloud.infernum.features.impl.kuudra.CrateHitboxes
 import dev.frozencloud.infernum.features.impl.kuudra.CratePrio
 import dev.frozencloud.infernum.features.impl.kuudra.PearlTrajectory
 import dev.frozencloud.infernum.features.impl.kuudra.PreSpot
+import dev.frozencloud.infernum.features.impl.kuudra.RendDamage
 import dev.frozencloud.infernum.features.impl.kuudra.SupplyPiles
 import dev.frozencloud.infernum.features.impl.kuudra.TeamHighlight
+import dev.frozencloud.infernum.features.impl.misc.NoLoadingScreen
 import dev.frozencloud.infernum.features.impl.misc.NoScroll
 import dev.frozencloud.infernum.features.impl.misc.NoSelfie
+import dev.frozencloud.infernum.features.impl.rendering.ArmorHud
+import dev.frozencloud.infernum.features.impl.rendering.PlayerScale
 import dev.frozencloud.infernum.features.impl.rendering.Interface
 import dev.frozencloud.infernum.features.impl.rendering.Notifications
+import dev.frozencloud.infernum.features.impl.rendering.VanillaHud
 import dev.frozencloud.infernum.features.impl.test.EtherWarp
 import dev.frozencloud.infernum.ui.settings.impl.KeybindSetting
 import dev.frozencloud.infernum.ui.settings.impl.OverlaySetting
@@ -45,11 +51,13 @@ object ModuleManager {
 
     init {
         registerModules(ModulesConfig(file = File(Infernum.configFile, "config.json")),
-            Interface, EtherWarp, Wardrobe, AutoSprint, NoScroll, Notifications, NoSelfie,
+            Interface, EtherWarp, Wardrobe, AutoSprint, NoScroll, Notifications, NoSelfie, PlayerScale, Slotbinding,
+            VanillaHud, ArmorHud, NoLoadingScreen,
 
 //            Kuudra
             TeamHighlight, PearlTrajectory,
-            PreSpot, CrateHitboxes, SupplyPiles, CratePrio
+            PreSpot, CrateHitboxes, SupplyPiles, CratePrio,
+            RendDamage
         )
     }
 

@@ -39,7 +39,7 @@ object TeamHighlight : Module(
         playerEntities.clear()
         val entities = mc.level?.entitiesForRendering()
         entities?.filter { it is Player && it.uuid.version() != 2 && it != mc.player }?.forEach { playerEntities.add(it as Player) }
-        elle = entities?.filter { it is Player && it.uuid.version() == 2 }?.getOrNull(0) as? Player
+        elle = entities?.firstOrNull { it is Player && it.uuid.version() == 2 } as? Player
     }
 
     @EventHandler

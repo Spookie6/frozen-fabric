@@ -11,11 +11,15 @@
   "client": [
     "MixinAbstractContainerScreen",
     "MixinAbstractSignEditScreen",
+    "MixinAvatarRenderer",
     "MixinClientLevel",
     "MixinClientPacketListener",
     "MixinConnection",
     "MixinEffectsInInventory",
+    "MixinEntity",
     "MixinEntityRenderDispatcher",
+    "MixinGui",
+    "MixinItemInhHandRenderer",
     "MixinKeyMapping",
     "MixinLocalPlayer",
     "MixinMinecraft",
@@ -25,7 +29,7 @@
     "MixinScreen",
     "MixinScreenEffectRenderer",
     "MixinShovelItem",
-    "MixinEntity",
+    "accessors.AccessorAbstractContainerScreen",
     "accessors.AccessorBeaconBeam",
     "accessors.AccessorClientLevel"
   ]

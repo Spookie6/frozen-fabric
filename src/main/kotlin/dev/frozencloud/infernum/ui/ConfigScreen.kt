@@ -50,8 +50,6 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
     private val moduleDropdownsByCategory = ModuleManager.modulesByCategory.mapValues { it.value.map { module -> ModuleDropdownComponent(module) } }
 
     override fun render(context: GuiGraphics, i: Int, j: Int, f: Float) {
-        super.renderBackground(context, i, j, f)
-
         context.fill(0, 0, context.guiWidth(), context.guiHeight(), Colors.Background.rgba)
 
         val scale = getStandardGuiScale()
@@ -221,6 +219,7 @@ object ConfigScreen : Screen(Component.literal("Config Screen")){
     override fun shouldCloseOnEsc(): Boolean =
         ModuleManager.keySettingsCache.firstOrNull { it.listening } == null
 
+    val icon = NanoVGHelper.createImage("/assets/${Infernum.MOD_ID}/infernum-icon.png")
     val hueImage = NanoVGHelper.createImage("/assets/${Infernum.MOD_ID}/HueGradient.png")
     val chevronImage = NanoVGHelper.createImage("/assets/${Infernum.MOD_ID}/chevron.svg")
     val moveImage = NanoVGHelper.createImage("/assets/${Infernum.MOD_ID}/move.svg")

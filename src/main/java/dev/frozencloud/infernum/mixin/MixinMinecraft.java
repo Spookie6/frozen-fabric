@@ -1,5 +1,6 @@
 package dev.frozencloud.infernum.mixin;
 
+import dev.frozencloud.infernum.features.impl.misc.NoLoadingScreen;
 import dev.frozencloud.infernum.util.skyblock.LocationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
@@ -18,7 +19,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     public void frozen$onSetScreen(Screen screen, CallbackInfo ci) {
-        if (LocationUtil.INSTANCE.getOnHypixel() && screen instanceof LevelLoadingScreen) {
+        if (LocationUtil.INSTANCE.getOnHypixel() && screen instanceof LevelLoadingScreen && NoLoadingScreen.INSTANCE.getEnabled()) {
             ci.cancel();
             setScreen(null);
         }

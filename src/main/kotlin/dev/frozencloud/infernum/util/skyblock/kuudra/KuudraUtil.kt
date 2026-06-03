@@ -22,7 +22,7 @@ import net.minecraft.world.entity.monster.Giant
 import net.minecraft.world.entity.monster.MagmaCube
 
 object KuudraUtil {
-    inline val inKuudra: Boolean get() = currentIsland.isArea(Island.Kuudra)
+    inline val inKuudra: Boolean get() = currentIsland.isArea(Island.Kuudra) || currentIsland.isArea(Island.SinglePlayer)
 
     private val tierRegex = Regex("Kuudra's Hollow \\(T(\\d)\\)$")
     private val placedRegex = Regex("✓ SUPPLIES RECEIVED ✓")
@@ -147,7 +147,6 @@ object KuudraUtil {
         event.packet.entries()
             .mapNotNull { it.displayName?.string }
             .forEach { entry ->
-                println(entry)
             }
     }
 

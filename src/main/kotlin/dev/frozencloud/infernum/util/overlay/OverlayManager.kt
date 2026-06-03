@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation
 import java.io.File
 
 object OverlayManager {
-    private val FILE = File(mc.gameDirectory, "config/frozen/overlays.json")
+    private val FILE = File(mc.gameDirectory, "config/infernum/overlays.json")
 
     val overlays = mutableListOf<Overlay>()
     private val configMap = mutableMapOf<String, Config>()
